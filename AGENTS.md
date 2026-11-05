@@ -106,11 +106,11 @@ Cuando un botón no está activo según el estado, se renderiza con la clase `.c
 
 ### Responsividad y Puntos de Ruptura (*Breakpoints*)
 - **Desktop (> 768px)**:
-  - Fondo: `concurso_fotos_caceres_bgh.jpg` (1920×1080), `background-attachment: fixed`.
+  - Fondo: Aplicado en `html, body`, `concurso_fotos_caceres_bgh.jpg` (1920×1080), `background-position: center center`, `background-attachment: fixed`.
   - Ancho de tarjeta: `max-width: 620px`.
   - Grid de datos: 2 columnas.
 - **Mobile (<= 767px)**:
-  - Fondo: `concurso_fotos_caceres_bgv.jpg` (1080×1920), `background-attachment: scroll`.
+  - Fondo: Aplicado en `html, body`, `concurso_fotos_caceres_bgv.jpg` (1080×1920), `background-position: center center`, `background-attachment: scroll`.
   - Ancho de tarjeta: `calc(100% - 24px)`, paddings reducidos.
   - Grid de datos: 1 columna.
 

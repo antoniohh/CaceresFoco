@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.0.0-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.0.1-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -135,3 +135,16 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
   - Excmo. Ayuntamiento de Cáceres
   - Consorcio Cáceres Ciudad Histórica
   - Cáceres Capital Europea de la Cultura 2031
+
+---
+
+## 📋 Historial de Versiones
+
+### [v1.0.1] - 2026-11-06
+- **Favicon oficial**: Inclusión de favicon corporativo de Diario HOY (`hoy/favicon.ico`).
+- **Alineación de Fondo (Paridad con Qualifio)**: Reubicación de fondos desktop y mobile a `html, body` con `background-position: center center` para evitar saltos visuales al navegar a las campañas de Qualifio.
+- **Actualización de documentación**: Especificación técnica de fondos en `AGENTS.md`.
+
+### [v1.0.0] - 2026-11-06
+- Lanzamiento inicial del portal hub y pasarela de redirección 301 (`/inscripcion/`, `/subir/`, `/galeria/`).
+- Integración de estados dinámicos (`config.json`), cuenta atrás, premios, acordeón de bases y botones sociales.
