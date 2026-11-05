@@ -1,0 +1,1186 @@
+/* ==========================================================================
+   CÁCERES EN EL FOCO - CONCURSO FOTOGRÁFICO | DIARIO HOY
+   Estilos principales optimizados para PHP 5.3 + Responsive 100%
+   ========================================================================== */
+
+/* 1. RESET Y BASE */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  background-color: #c9d5d3;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2. ENCABEZADO OFICIAL DIARIO HOY (COHERENCIA CON QUALIFIO) */
+header.site-header {
+  width: 100% !important;
+  background-color: #ffffff !important;
+  padding: 16px 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  z-index: 50;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+header.site-header::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 1px !important;
+  background-color: #e9e9e9 !important;
+}
+
+header.site-header .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header.site-header a.logo-link {
+  display: inline-block;
+  line-height: 1;
+}
+
+header.site-header a.logo-link img {
+  height: 24px !important;
+  width: auto;
+  display: block;
+}
+
+/* 3. SITE WRAPPER CON FONDOS ORIGINALES */
+.site-wrapper {
+  flex: 1 0 auto;
+  width: 100%;
+  background-color: #c9d5d3;
+  background-image: url('../img/concurso_fotos_caceres_bgh.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 32px 16px 56px 16px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@media (max-width: 767px) {
+  .site-wrapper {
+    background-image: url('../img/concurso_fotos_caceres_bgv.jpg');
+    background-attachment: scroll;
+    padding: 18px 12px 36px 12px;
+  }
+}
+
+/* 4. TARJETA PRINCIPAL LANDING */
+.landing-card {
+  max-width: 620px;
+  width: 100%;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 8px 24px -4px rgba(15, 23, 42, 0.16),
+    0 24px 48px -8px rgba(15, 23, 42, 0.22);
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  animation: cardFadeIn 0.5s ease-out;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 5. HERO BANNER VISUAL */
+.hero-visual {
+  position: relative;
+  width: 100%;
+  background: #cbd5e1;
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.hero-visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.landing-card:hover .hero-visual img {
+  transform: scale(1.015);
+}
+
+.hero-visual .hero-overlay-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #f8fafc;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* 5.1 PUNTO INDICADOR CON PULSO */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: #22c55e;
+  box-shadow: 0 0 0 rgba(34, 197, 94, 0.4);
+  animation: pulseDotGreen 1.8s infinite ease-in-out;
+}
+
+/* BADGES DINÁMICOS SEGÚN ESTADO */
+.hero-overlay-badge.badge-open {
+  background: rgba(15, 23, 42, 0.88);
+}
+.hero-overlay-badge.badge-open .pulse-dot {
+  background-color: #22c55e;
+  animation: pulseDotGreen 1.8s infinite ease-in-out;
+}
+
+.hero-overlay-badge.badge-live {
+  background: rgba(185, 28, 28, 0.95);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+}
+.hero-overlay-badge.badge-live .pulse-dot {
+  background-color: #ffffff;
+  animation: pulseDotRed 1s infinite ease-in-out;
+}
+
+.hero-overlay-badge.badge-closed {
+  background: rgba(71, 85, 105, 0.9);
+}
+.hero-overlay-badge.badge-closed .pulse-dot {
+  background-color: #f59e0b;
+  animation: pulseDotAmber 2s infinite ease-in-out;
+}
+
+.hero-overlay-badge.badge-results {
+  background: rgba(30, 58, 138, 0.92);
+}
+.hero-overlay-badge.badge-results .pulse-dot {
+  background-color: #fbbf24;
+  animation: pulseDotBlue 2s infinite ease-in-out;
+}
+
+@keyframes pulseDotGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(34, 197, 94, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    transform: scale(0.95);
+  }
+}
+
+@keyframes pulseDotRed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+    transform: scale(1.15);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    transform: scale(0.95);
+  }
+}
+
+@keyframes pulseDotAmber {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    transform: scale(0.95);
+  }
+}
+
+@keyframes pulseDotBlue {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(251, 191, 36, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+    transform: scale(0.95);
+  }
+}
+
+/* 6. CONTENIDO INTERIOR DE LA TARJETA */
+.card-body {
+  padding: 28px 26px;
+}
+
+@media (max-width: 600px) {
+  .card-body {
+    padding: 20px 16px;
+  }
+}
+
+/* 7. ENCABEZADO TIPOGRÁFICO CON FOCO FOTOGRÁFICO */
+.title-container {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.tag-anniversary {
+  display: inline-block;
+  background-color: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 12px;
+  border: 1px solid #fde68a;
+}
+
+.camera-focus-box {
+  position: relative;
+  display: inline-block;
+  padding: 10px 24px;
+  margin: 4px 0 10px 0;
+}
+
+/* Retícula de enfoque cámara */
+.corner-bracket {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #0f2b48;
+  border-style: solid;
+}
+.corner-tl { top: 0; left: 0; border-width: 3px 0 0 3px; border-top-left-radius: 4px; }
+.corner-tr { top: 0; right: 0; border-width: 3px 3px 0 0; border-top-right-radius: 4px; }
+.corner-bl { bottom: 0; left: 0; border-width: 0 0 3px 3px; border-bottom-left-radius: 4px; }
+.corner-br { bottom: 0; right: 0; border-width: 0 3px 3px 0; border-bottom-right-radius: 4px; }
+
+.main-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #0f2b48;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.main-title span.subword {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.contest-tagline {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ce0000;
+  margin: 8px 0 0 0;
+}
+
+/* Claim oficial en cursiva */
+.editorial-claim {
+  background: #f8fafc;
+  border-left: 3px solid #ce0000;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 18px 0 20px 0;
+  text-align: left;
+}
+
+.editorial-claim p.quote-text {
+  font-size: 16px;
+  font-weight: 600;
+  font-style: italic;
+  color: #1e293b;
+  line-height: 1.45;
+  margin: 0 0 6px 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.editorial-claim p.desc-text {
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 6px 0;
+}
+
+.editorial-claim p.desc-subtext {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* 8. GRID DE DATOS CLAVE DEL RALLY */
+.event-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 480px) {
+  .event-pills-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.event-pill {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.event-pill:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.event-pill .pill-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.event-pill .pill-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-pill .pill-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.4px;
+}
+
+.event-pill .pill-value {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* 9. CUENTA ATRÁS DINÁMICA */
+.countdown-wrapper {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.countdown-wrapper .countdown-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.countdown-digits-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.countdown-item {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 10px;
+  min-width: 52px;
+}
+
+.countdown-item .digit-number {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: block;
+}
+
+.countdown-item .digit-unit {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+  display: block;
+}
+
+.countdown-separator {
+  font-size: 18px;
+  font-weight: 900;
+  color: #64748b;
+  line-height: 1;
+}
+
+/* 10. EL GRAN PREMIO DESTACADO (SAMSUNG GALAXY S25 FE) */
+.prize-showcase {
+  background: linear-gradient(135deg, #0f2042 0%, #173873 100%);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 26px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px -2px rgba(15, 32, 66, 0.35);
+}
+
+.prize-showcase::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(206, 0, 0, 0.35) 0%, rgba(206, 0, 0, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.prize-content {
+  flex: 1;
+  z-index: 1;
+}
+
+.prize-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ce0000;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.prize-model-title {
+  font-size: 21px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.prize-pitch {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.prize-image-wrap {
+  flex-shrink: 0;
+  width: 96px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.prize-image-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+}
+
+.prize-showcase:hover .prize-image-wrap {
+  transform: translateY(-4px) scale(1.04);
+}
+
+@media (max-width: 460px) {
+  .prize-showcase {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 16px;
+  }
+  .prize-image-wrap {
+    width: 90px;
+    height: 120px;
+    margin: 0 auto 6px auto;
+  }
+  .prize-header-badge {
+    margin: 0 auto 8px auto;
+  }
+}
+
+/* 11. BOTONERA PRINCIPAL DE LAS 3 FASES (PROXIES DE QUALIFIO) */
+.contest-steps-section {
+  margin-bottom: 28px;
+}
+
+.section-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.action-buttons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Estilo base de los botones interactivos */
+.action-card {
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.action-card .card-step-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 900;
+  flex-shrink: 0;
+  margin-right: 14px;
+}
+
+.action-card .card-info-wrap {
+  flex: 1;
+  text-align: left;
+}
+
+.action-card .card-main-title {
+  display: block;
+  font-size: 15.5px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.action-card .card-subtext {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+.action-card .card-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-left: 10px;
+  transition: transform 0.2s ease;
+}
+
+.action-card:hover .card-action-icon {
+  transform: translateX(4px);
+}
+
+/* BOTÓN 1: INSCRIPCIÓN (DESTACADO / LLAMADA PRINCIPAL HOY) */
+.action-card.card-primary {
+  background: linear-gradient(135deg, #ce0000 0%, #b80000 100%);
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(206, 0, 0, 0.3);
+  border: 1px solid #990000;
+}
+
+.action-card.card-primary .card-step-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.action-card.card-primary .card-main-title {
+  color: #ffffff;
+}
+
+.action-card.card-primary .card-subtext {
+  color: #fee2e2;
+}
+
+.action-card.card-primary .card-action-icon {
+  background: #ffffff;
+  color: #ce0000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.action-card.card-primary:hover {
+  background: linear-gradient(135deg, #b80000 0%, #990000 100%);
+  box-shadow: 0 8px 22px rgba(206, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+/* BOTONES SECUNDARIOS: SUBIR FOTOS Y GALERÍA */
+.action-card.card-secondary {
+  background: #ffffff;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.action-card.card-secondary .card-step-badge {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.action-card.card-secondary .card-main-title {
+  color: #0f172a;
+}
+
+.action-card.card-secondary .card-subtext {
+  color: #64748b;
+}
+
+.action-card.card-secondary .card-action-icon {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.action-card.card-secondary:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* BOTÓN DESHABILITADO / CERRADO */
+.action-card.card-disabled {
+  background: #f8fafc;
+  color: #64748b !important;
+  border: 1.5px dashed #cbd5e1;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.action-card.card-disabled .card-step-badge {
+  background: #e2e8f0;
+  color: #94a3b8;
+}
+
+.action-card.card-disabled .card-main-title {
+  color: #64748b;
+}
+
+.action-card.card-disabled .card-subtext {
+  color: #94a3b8;
+}
+
+.action-card.card-disabled .card-action-icon {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.action-card.card-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ETIQUETA DE ESTADO DE FASE */
+.card-state-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.card-state-tag.tag-open {
+  background: #ffffff;
+  color: #ce0000;
+}
+
+.card-state-tag.tag-closed {
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+.card-state-tag.tag-soon {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.card-state-tag.tag-live {
+  background: #ffffff;
+  color: #b91c1c;
+  animation: pulseDotLive 1.2s infinite;
+}
+
+.card-state-tag.tag-done {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* PREMIOS SECUNDARIOS (2º Y 3ER PREMIO) */
+.secondary-prizes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+@media (max-width: 520px) {
+  .secondary-prizes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.secondary-prize-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.secondary-prize-card .sec-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.secondary-prize-card .sec-info strong {
+  display: block;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.secondary-prize-card .sec-info span {
+  display: block;
+  font-size: 11px;
+  color: #cbd5e1;
+  line-height: 1.3;
+}
+
+/* 12. CÓMO PARTICIPAR / PREGUNTAS FRECUENTES INTERACTIVAS */
+.guide-accordion {
+  margin-bottom: 26px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-trigger {
+  width: 100%;
+  padding: 13px 16px;
+  text-align: left;
+  background: #f8fafc;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: inherit;
+}
+
+.accordion-trigger:hover {
+  background: #f1f5f9;
+}
+
+.accordion-trigger .chevron {
+  font-size: 12px;
+  transition: transform 0.25s ease;
+  color: #64748b;
+}
+
+.accordion-item.active .accordion-trigger .chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-body {
+  padding: 0 16px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), padding 0.3s ease;
+  background: #ffffff;
+}
+
+.accordion-item.active .accordion-body {
+  max-height: 500px;
+  padding: 14px 16px;
+  transition: max-height 0.35s ease-in-out, padding 0.3s ease;
+}
+
+.accordion-body p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #475569;
+  margin: 0 0 8px 0;
+}
+
+.accordion-body p:last-child {
+  margin-bottom: 0;
+}
+
+.accordion-body ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* 13. BARRA SOCIAL / COMPARTIR */
+.share-section {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.share-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.share-buttons-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.share-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+/* WhatsApp */
+.share-whatsapp {
+  background: #25d366;
+  color: #ffffff !important;
+}
+.share-whatsapp:hover {
+  background: #1eb956;
+}
+
+/* X (Twitter) */
+.share-x {
+  background: #000000;
+  color: #ffffff !important;
+}
+.share-x:hover {
+  background: #262626;
+}
+
+/* Facebook */
+.share-facebook {
+  background: #1877f2;
+  color: #ffffff !important;
+}
+.share-facebook:hover {
+  background: #0d65d9;
+}
+
+/* Copiar link */
+.share-copy {
+  background: #ffffff;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1;
+}
+.share-copy:hover {
+  background: #f1f5f9;
+}
+
+/* Toast de enlace copiado */
+.toast-notice {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 9999;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.toast-notice.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* 14. PATROCINADORES Y COLABORADORES (IMAGEN REAL + ACCESIBILIDAD) */
+.sponsors-wrapper {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.sponsors-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.sponsors-banner-wrap {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.sponsors-banner-wrap img {
+  width: 100%;
+  max-width: 580px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px;
+}
+
+/* 15. PIE DE PÁGINA NATIVO DIARIO HOY (COHERENCIA CON QUALIFIO) */
+footer.site-footer {
+  flex-shrink: 0;
+  width: 100% !important;
+  background-color: #ffffff !important;
+  padding: 20px 16px 30px 16px !important;
+  box-sizing: border-box !important;
+  border-top: none !important;
+  position: relative;
+  z-index: 10;
+}
+
+footer.site-footer::before {
+  content: "" !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  height: 2px !important;
+  background-color: #202020 !important;
+  margin: 0 auto 16px auto !important;
+}
+
+.footer-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  text-align: center !important;
+  font-size: 11px !important;
+  color: #333333 !important;
+  line-height: 1.6 !important;
+}
+
+.footer-links a {
+  color: #2b2b2b !important;
+  text-decoration: none !important;
+  font-weight: 400 !important;
+  margin: 0 4px !important;
+}
+
+.footer-links a:hover {
+  text-decoration: underline !important;
+}
+
+.footer-links .dot {
+  color: #888888 !important;
+  margin: 0 3px !important;
+}
+
+/* 16. AJUSTES FINOS PARA PANTALLAS PEQUEÑAS (MÓVILES) */
+@media (max-width: 767px) {
+  .landing-card {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  
+  .main-title {
+    font-size: 22px;
+  }
+  
+  .main-title span.subword {
+    font-size: 17px;
+  }
+  
+  .editorial-claim p.quote-text {
+    font-size: 14.5px;
+  }
+  
+  .action-card {
+    padding: 14px 14px;
+  }
+  
+  .action-card .card-step-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    margin-right: 10px;
+  }
+  
+  .action-card .card-main-title {
+    font-size: 14px;
+  }
+  
+  .action-card .card-subtext {
+    font-size: 11.5px;
+  }
+  
+  .prize-model-title {
+    font-size: 19px;
+  }
+}

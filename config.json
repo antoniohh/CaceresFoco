@@ -1,0 +1,20 @@
+{
+  "estado": "INSCRIPCIONES_ABIERTAS",
+  "mostrar_temporizador": false,
+  "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00",
+  "_comentarios": {
+    "estados_posibles": [
+      "CERRADO",
+      "INSCRIPCIONES_ABIERTAS",
+      "CONCURSO_ABIERTO",
+      "GALERIA_Y_GANADORES"
+    ],
+    "descripcion_estados": {
+      "CERRADO": "Concurso cerrado o proximo. Fases indicadas como Cerradas/Proximamente.",
+      "INSCRIPCIONES_ABIERTAS": "Fase 1 (Inscripcion) activa y destacada en rojo. Las demas en espera.",
+      "CONCURSO_ABIERTO": "Rally en curso. Fase 2 (Subir Fotos) activa y destacada en rojo.",
+      "GALERIA_Y_GANADORES": "Fallo del jurado publicado. Fase 3 (Galeria y Ganadores) activa y destacada."
+    },
+    "mostrar_temporizador": "true para mostrar la cuenta atras, false para ocultarla."
+  }
+}
