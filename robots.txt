@@ -1,0 +1,19 @@
+# ==============================================================================
+# robots.txt — Concurso Fotográfico "Cáceres en el Foco"
+# Autor: Antonio Horrillo <ahorrillo@hoy.es>
+# Propiedad: Corporación de Medios de Extremadura, S.A. (Diario HOY / Vocento)
+# Portal Oficial: https://servicios.hoy.es/caceresenelfoco/
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /inscripcion/
+Allow: /subir/
+Allow: /galeria/
+
+# Excluir área de gestión administrativa privada
+Disallow: /panel/
+
+# Sitemap Oficial
+Sitemap: https://servicios.hoy.es/caceresenelfoco/sitemap.xml

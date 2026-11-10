@@ -16,14 +16,17 @@ El proyecto opera bajo el patrón **Landing Hub & Proxy Portal**:
         [ index.php ]               [ Proxy Folders ]
    (Landing interactiva)           (Redirecciones 301)
          │                               │
-         ├─ config.json (Estado)         ├─ /inscripcion/ ➔ Qualifio Form
+         ├─ panel/config.json            ├─ /inscripcion/ ➔ Qualifio Form
          ├─ assets/css/style.css         ├─ /subir/       ➔ Qualifio Upload
          └─ assets/js/main.js            └─ /galeria/     ➔ Qualifio Gallery
+         │
+    [ Gestor Panel ]
+         └─ /panel/ (index.php)
 ```
 
 ### Principio de Diseño
 Las campañas en Qualifio se ejecutan dentro de su propio motor en `https://entretenimiento.hoy.es/quiz/...`. Dado que Qualifio restringe la inyección profunda de scripts y personalizaciones estructurales complejas:
-1. Este repositorio actúa como la **fachada pública** en `https://servicios.hoy.es/rally/`.
+1. Este repositorio actúa como la **fachada pública** en `https://servicios.hoy.es/caceresenelfoco/`.
 2. Las subcarpetas [`inscripcion/index.php`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/inscripcion/index.php), [`subir/index.php`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/subir/index.php) y [`galeria/index.php`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/galeria/index.php) ejecutan redirecciones HTTP 301 limpias a los quizzes correspondientes.
 3. El frontend de la landing replica con exactitud los componentes globales inyectados en Qualifio (header, footer, fondo slate y tarjeta centrada) para que el salto entre páginas sea visualmente continuo.
 
@@ -44,9 +47,9 @@ Las campañas en Qualifio se ejecutan dentro de su propio motor en `https://entr
 
 ---
 
-## 3. Máquina de Estados (`config.json`)
+## 3. Máquina de Estados (`panel/config.json`)
 
-El flujo del concurso se controla desde [`config.json`](config.json). Admite modo manual y modo automatizado por calendario:
+El flujo del concurso se controla desde [`panel/config.json`](panel/config.json). Admite modo manual y modo automatizado por calendario:
 
 ```json
 {

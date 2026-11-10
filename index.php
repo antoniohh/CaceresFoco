@@ -1,15 +1,27 @@
 <?php
 /**
- * Concurso Fotográfico: Cáceres en el Foco
- * Diario HOY - 40º Aniversario Patrimonio de la Humanidad
- * Compatible con PHP 5.3+
+ * ==============================================================================
+ * Concurso Fotográfico: "Cáceres en el Foco"
+ * 40º Aniversario de Cáceres como Patrimonio de la Humanidad
+ *
+ * @author    Antonio Horrillo <ahorrillo@hoy.es>
+ * @copyright (c) 2026 Corporación de Medios de Extremadura, S.A. (Grupo Vocento)
+ *            HOY Diario de Extremadura · Avda. del Diario Hoy, s/n, 06008 Badajoz
+ *            CIF: A-78865441 · Todos los derechos reservados.
+ * @link      https://www.hoy.es
+ * @link      https://servicios.hoy.es/caceresenelfoco/
+ * @version   1.2.0 (Compatible con PHP 5.3+)
+ * ==============================================================================
  */
 
 // 0. ZONA HORARIA OFICIAL (España Peninsular)
 date_default_timezone_set('Europe/Madrid');
 
 // 1. CARGA DE CONFIGURACIÓN DINÁMICA (config.json)
-$configFile = dirname(__FILE__) . '/config.json';
+$configFile = dirname(__FILE__) . '/panel/config.json';
+if (!file_exists($configFile) && file_exists(dirname(__FILE__) . '/config.json')) {
+    $configFile = dirname(__FILE__) . '/config.json';
+}
 $config = array(
     'control_por_fechas' => false,
     'estado' => 'INSCRIPCIONES_ABIERTAS',
@@ -197,12 +209,12 @@ $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'servicios.hoy.es
 if (isset($_SERVER['PHP_SELF']) && $_SERVER['PHP_SELF'] !== '') {
     $scriptDir = dirname($_SERVER['PHP_SELF']);
     if ($scriptDir === '.' || $scriptDir === '/' || $scriptDir === '\\' || $scriptDir === '') {
-        $pathPrefix = '/rally/';
+        $pathPrefix = '/caceresenelfoco/';
     } else {
         $pathPrefix = '/' . trim($scriptDir, '/\\') . '/';
     }
 } else {
-    $pathPrefix = '/rally/';
+    $pathPrefix = '/caceresenelfoco/';
 }
 $baseUrl = $protocol . $host . $pathPrefix;
 
@@ -225,11 +237,18 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
   <meta name="description" content="<?php echo htmlspecialchars($siteDesc, ENT_QUOTES, 'UTF-8'); ?>">
   <meta name="keywords" content="Cáceres en el Foco, concurso fotográfico, Diario HOY, rally fotográfico Cáceres, Plaza Mayor Cáceres, Patrimonio de la Humanidad, fotos Cáceres, Samsung Galaxy S25 FE, Vocento">
   <meta name="author" content="Diario HOY">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="<?php echo htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8'); ?>">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="<?php echo htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8'); ?>sitemap.xml">
   <link rel="shortcut icon" href="https://static.vocstatic.com/voc26/latest/assets/images/favicon/hoy/favicon.ico" type="image/x-icon" />
   <link rel="icon" href="https://static.vocstatic.com/voc26/latest/assets/images/favicon/hoy/favicon.ico" type="image/x-icon" />
   <meta name="theme-color" content="#ce0000">
+
+  <!-- GEOLOCALIZACIÓN Y SEO LOCAL -->
+  <meta name="geo.region" content="ES-EX">
+  <meta name="geo.placename" content="Cáceres">
+  <meta name="geo.position" content="39.4753;-6.3722">
+  <meta name="ICBM" content="39.4753, -6.3722">
 
   <!-- OPEN GRAPH / FACEBOOK / WHATSAPP / LINKEDIN -->
   <meta property="og:type" content="website">

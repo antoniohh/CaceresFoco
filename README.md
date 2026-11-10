@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.1.0-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.2.0-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -50,7 +50,7 @@ Las campañas del concurso están gestionadas mediante la plataforma **Qualifio*
 ## 📂 Estructura del Directorio
 
 ```text
-rally/
+caceresenelfoco/
 ├── assets/
 │   ├── bases/
 │   │   └── Bases legales Rally Fotográfico .docx   # Bases legales oficiales
@@ -72,18 +72,22 @@ rally/
 │   └── index.php                                   # Proxy 301 a Qualifio (Inscripción)
 ├── subir/
 │   └── index.php                                   # Proxy 301 a Qualifio (Subida fotos)
-├── config.json                                     # Configuración de estados y temporizador
-├── index.php                                       # Landing page principal
-├── index_old.php                                   # Respaldo de la versión original
+├── panel/
+│   ├── config.json                                 # Configuración de estados y temporizador
+│   ├── config.json.bak                             # Copia de seguridad automática
+│   └── index.php                                   # Panel de administración visual (PHP 5.3)
+├── index.php                                       # Landing page pública principal
+├── robots.txt                                      # Directivas para buscadores (bloquea /panel/)
+├── sitemap.xml                                     # Mapa del sitio XML con imágenes para Google
 ├── AGENTS.md                                       # Guía técnica de arquitectura y estilos
 └── README.md                                       # Documentación general
 ```
 
 ---
 
-## ⚙️ Configuración (`config.json`)
+## ⚙️ Configuración (`panel/config.json`)
 
-Edita el archivo [`config.json`](config.json) para controlar el comportamiento del portal. Permite alternar entre modo manual y automatizado por calendario:
+Edita el archivo [`panel/config.json`](panel/config.json) (o usa directamente la interfaz en [`panel/`](panel/)) para controlar el comportamiento del portal. Permite alternar entre modo manual y automatizado por calendario:
 
 ```json
 {
@@ -112,28 +116,40 @@ Edita el archivo [`config.json`](config.json) para controlar el comportamiento d
 
 ---
 
+## 🎛️ Panel de Administración (`panel/`)
+
+El proyecto incluye un gestor administrativo mono-archivo autónomo ubicado en [`panel/`](panel/) (archivo [`panel/index.php`](panel/index.php)) compatible con **PHP 5.3+**:
+
+- **Acceso protegido por contraseña**: Protegido mediante huella criptográfica SHA-256 (`ADMIN_PASSWORD_HASH`) para que la contraseña nunca esté expuesta en texto plano en el servidor ni en Git.
+- **Protegido contra rastreadores**: Bloqueado en `robots.txt` y con cabeceras `X-Robots-Tag: noindex, nofollow` para evitar cualquier indexación no deseada.
+- **Control integral de `config.json`**:
+  - Selector interactivo entre **Modo Automático por Fechas** y **Modo Manual Fijo**.
+  - Ajuste de estados (`CERRADO`, `INSCRIPCIONES_ABIERTAS`, `CONCURSO_ABIERTO`, `GALERIA_Y_GANADORES`).
+  - Gestión visual de fases: añadir, reordenar (▲ / ▼), eliminar y definir fechas límite y cuenta atrás.
+  - Editor directo de **JSON Raw** con validador de sintaxis.
+  - Generación de **copia de seguridad automática** (`panel/config.json.bak`) con botón de restauración con 1 clic.
+  - Monitor en tiempo real del estado activo en el servidor (`Europe/Madrid`).
+
+---
+
 ## 💻 Puesta en Marcha en Local
 
 Solo necesitas tener PHP instalado en tu máquina:
 
 ```bash
-# 1. Clonar el repositorio
-git clone <URL_DEL_REPOSITORIO>
-cd rally
-
-# 2. Iniciar el servidor local
+# 1. Iniciar el servidor local
 php -S localhost:8000
 ```
 
 Abre en tu navegador:
-- Portal actual: **[http://localhost:8000](http://localhost:8000)**
-- Comparativa versión anterior: **[http://localhost:8000/index_old.php](http://localhost:8000/index_old.php)**
+- Portal público: **[http://localhost:8000](http://localhost:8000)**
+- Panel de administración: **[http://localhost:8000/panel/](http://localhost:8000/panel/)**
 
 ---
 
 ## 🌐 Despliegue en Producción
 
-Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https://servicios.hoy.es/rally/`).
+Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https://servicios.hoy.es/caceresenelfoco/`).
 - La aplicación autodetecta HTTPS, subdirectorios y dominios para generar las etiquetas canónicas y de Open Graph de forma automática.
 - No requiere base de datos ni compiladores (CSS/JS nativos y ligeros).
 
@@ -150,6 +166,15 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.2.0] - 2026-11-10
+- **Panel de Administración Autónomo (`panel/`)**: Gestor visual mono-archivo (`index.php`) para controlar el 100% de los parámetros de `config.json` en tiempo real (modo manual, transiciones automáticas, temporizador y fases del rally). Compatible estrictamente con PHP 5.3+.
+- **Autenticación Criptográfica Robusta**: Acceso protegido mediante hash SHA-256 (`ADMIN_PASSWORD_HASH`) y algoritmo de comparación segura resistente a ataques de temporización (*timing attacks*). La contraseña nunca se almacena ni expone en texto plano en el servidor ni en Git.
+- **Aislamiento Arquitectónico del Panel**: Reubicación de la gestión administrativa y archivos JSON en la subcarpeta `panel/`, manteniendo la raíz del proyecto para una URL canónica pública limpia y corta (`https://servicios.hoy.es/caceresenelfoco/`).
+- **Copia de Seguridad Automática**: Generación de backup atómico (`panel/config.json.bak`) previo a cada guardado, con mecanismo de restauración en 1 clic.
+- **Optimización SEO y Rastreo Completo**: Creación de `robots.txt` (con exclusión de indexación para `/panel/`) y `sitemap.xml` enriquecido con metadatos de Google Images. Inclusión de directivas de geolocalización de Cáceres en la cabecera HTML de `index.php`.
+- **Limpieza de Archivos**: Eliminación de ficheros obsoletos (`index_old.php`, etc.).
+- **Autoría y Propiedad Intelectual**: Incorporación de bloques formales de autoría (Antonio Horrillo <ahorrillo@hoy.es>) y titularidad de Corporación de Medios de Extremadura, S.A. (Diario HOY / Grupo Vocento).
 
 ### [v1.1.0] - 2026-11-10
 - **Transición automática por fechas**: Soporte para cambio dinámico de fases mediante calendario en `config.json` (`control_por_fechas` y array `fases_fechas`).

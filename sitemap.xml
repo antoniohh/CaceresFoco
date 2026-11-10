@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Concurso Fotográfico "Cáceres en el Foco"
+  Autor: Antonio Horrillo <ahorrillo@hoy.es>
+  Propiedad: Corporación de Medios de Extremadura, S.A. (Diario HOY / Grupo Vocento)
+  Portal Oficial: https://servicios.hoy.es/caceresenelfoco/
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Portada / Landing Hub Principal -->
+  <url>
+    <loc>https://servicios.hoy.es/caceresenelfoco/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://servicios.hoy.es/caceresenelfoco/assets/img/concurso_fotos_caceres.jpg</image:loc>
+      <image:title>Cáceres en el Foco - Concurso Fotográfico Diario HOY</image:title>
+      <image:caption>Cartel y cabecera oficial del concurso fotográfico 40º Aniversario de Cáceres Patrimonio de la Humanidad</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://servicios.hoy.es/caceresenelfoco/assets/img/samsung-galaxy-s25-fe.png</image:loc>
+      <image:title>Primer Premio Concurso Cáceres en el Foco - Samsung Galaxy S25 FE</image:title>
+      <image:caption>Smartphone Samsung Galaxy S25 FE para la mejor fotografía del rally</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://servicios.hoy.es/caceresenelfoco/assets/img/patrocinadores.png</image:loc>
+      <image:title>Organización y Entidades Colaboradoras</image:title>
+      <image:caption>Diario HOY, Ayuntamiento de Cáceres, Capital Europea de la Cultura 2031, Consorcio Cáceres Ciudad Histórica</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Fase 1: Inscripción Previa Oficial -->
+  <url>
+    <loc>https://servicios.hoy.es/caceresenelfoco/inscripcion/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Fase 2: Subida y Envío de Fotografías -->
+  <url>
+    <loc>https://servicios.hoy.es/caceresenelfoco/subir/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Fase 3: Galería Pública y Ganadores -->
+  <url>
+    <loc>https://servicios.hoy.es/caceresenelfoco/galeria/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

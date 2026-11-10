@@ -1,6 +1,17 @@
 /**
- * Cáceres en el Foco - Concurso Fotográfico | Diario HOY
+ * ==============================================================================
+ * CÁCERES EN EL FOCO - CONCURSO FOTOGRÁFICO | DIARIO HOY
+ * 40º Aniversario de Cáceres como Patrimonio de la Humanidad
+ *
+ * @author    Antonio Horrillo <ahorrillo@hoy.es>
+ * @copyright (c) 2026 Corporación de Medios de Extremadura, S.A. (Grupo Vocento)
+ *            HOY Diario de Extremadura · Avda. del Diario Hoy, s/n, 06008 Badajoz
+ *            CIF: A-78865441 · Todos los derechos reservados.
+ * @link      https://www.hoy.es
+ * @link      https://servicios.hoy.es/caceresenelfoco/
+ *
  * Funcionalidades interactivas (Vanilla JS compatible y ligero)
+ * ==============================================================================
  */
 
 document.addEventListener('DOMContentLoaded', function () {

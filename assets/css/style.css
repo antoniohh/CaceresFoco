@@ -1,7 +1,16 @@
-/* ==========================================================================
-   CÁCERES EN EL FOCO - CONCURSO FOTOGRÁFICO | DIARIO HOY
-   Estilos principales optimizados para PHP 5.3 + Responsive 100%
-   ========================================================================== */
+/* ==============================================================================
+ * CÁCERES EN EL FOCO - CONCURSO FOTOGRÁFICO | DIARIO HOY
+ * 40º Aniversario de Cáceres como Patrimonio de la Humanidad
+ *
+ * @author    Antonio Horrillo <ahorrillo@hoy.es>
+ * @copyright (c) 2026 Corporación de Medios de Extremadura, S.A. (Grupo Vocento)
+ *            HOY Diario de Extremadura · Avda. del Diario Hoy, s/n, 06008 Badajoz
+ *            CIF: A-78865441 · Todos los derechos reservados.
+ * @link      https://www.hoy.es
+ * @link      https://servicios.hoy.es/caceresenelfoco/
+ *
+ * Estilos principales optimizados para PHP 5.3 + Responsive 100%
+ * ============================================================================== */
 
 /* 1. RESET Y BASE */
 *, *::before, *::after {
