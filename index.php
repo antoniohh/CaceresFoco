@@ -5,12 +5,18 @@
  * Compatible con PHP 5.3+
  */
 
+// 0. ZONA HORARIA OFICIAL (España Peninsular)
+date_default_timezone_set('Europe/Madrid');
+
 // 1. CARGA DE CONFIGURACIÓN DINÁMICA (config.json)
 $configFile = dirname(__FILE__) . '/config.json';
 $config = array(
+    'control_por_fechas' => false,
     'estado' => 'INSCRIPCIONES_ABIERTAS',
     'mostrar_temporizador' => true,
-    'fecha_objetivo_temporizador' => '2026-11-21T12:00:00+01:00'
+    'fecha_objetivo_temporizador' => '2026-11-21T12:00:00+01:00',
+    'rotulo_temporizador' => 'Cuenta atrás para el inicio del rally fotográfico',
+    'fases_fechas' => array()
 );
 
 if (file_exists($configFile)) {
@@ -18,6 +24,9 @@ if (file_exists($configFile)) {
     if ($fileContent) {
         $loadedConfig = json_decode($fileContent, true);
         if (is_array($loadedConfig)) {
+            if (isset($loadedConfig['control_por_fechas'])) {
+                $config['control_por_fechas'] = (bool)$loadedConfig['control_por_fechas'];
+            }
             if (isset($loadedConfig['estado'])) {
                 $config['estado'] = strtoupper(trim($loadedConfig['estado']));
             }
@@ -27,6 +36,44 @@ if (file_exists($configFile)) {
             if (isset($loadedConfig['fecha_objetivo_temporizador'])) {
                 $config['fecha_objetivo_temporizador'] = $loadedConfig['fecha_objetivo_temporizador'];
             }
+            if (isset($loadedConfig['rotulo_temporizador'])) {
+                $config['rotulo_temporizador'] = $loadedConfig['rotulo_temporizador'];
+            }
+            if (isset($loadedConfig['fases_fechas']) && is_array($loadedConfig['fases_fechas'])) {
+                $config['fases_fechas'] = $loadedConfig['fases_fechas'];
+            }
+        }
+    }
+}
+
+// 1.1 RESOLUCIÓN DE ESTADO POR FECHA (SI control_por_fechas ES TRUE)
+$ahoraTimestamp = time();
+$modoActivo = 'manual';
+
+if ($config['control_por_fechas'] && !empty($config['fases_fechas'])) {
+    foreach ($config['fases_fechas'] as $fase) {
+        if (!is_array($fase) || !isset($fase['estado'])) {
+            continue;
+        }
+
+        $hastaTimestamp = (!empty($fase['hasta'])) ? strtotime($fase['hasta']) : null;
+
+        // Si 'hasta' es null o la hora evaluada es anterior a 'hasta', esta es la fase activa
+        if ($hastaTimestamp === null || $ahoraTimestamp < $hastaTimestamp) {
+            $config['estado'] = strtoupper(trim($fase['estado']));
+            if (isset($fase['mostrar_temporizador'])) {
+                $config['mostrar_temporizador'] = (bool)$fase['mostrar_temporizador'];
+            }
+            if (isset($fase['fecha_objetivo_temporizador'])) {
+                $config['fecha_objetivo_temporizador'] = $fase['fecha_objetivo_temporizador'];
+            } elseif ($hastaTimestamp !== null) {
+                $config['fecha_objetivo_temporizador'] = $fase['hasta'];
+            }
+            if (isset($fase['rotulo_temporizador'])) {
+                $config['rotulo_temporizador'] = $fase['rotulo_temporizador'];
+            }
+            $modoActivo = 'auto';
+            break;
         }
     }
 }
@@ -339,7 +386,7 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
         <?php if ($config['mostrar_temporizador']): ?>
         <div class="countdown-wrapper" id="event-countdown" data-target-date="<?php echo htmlspecialchars($config['fecha_objetivo_temporizador'], ENT_QUOTES, 'UTF-8'); ?>">
           <div class="countdown-title">
-            <span>⏱️ Cuenta atrás para el inicio del rally fotográfico</span>
+            <span>⏱️ <?php echo htmlspecialchars($config['rotulo_temporizador'], ENT_QUOTES, 'UTF-8'); ?></span>
           </div>
           <div class="countdown-digits-grid">
             <div class="countdown-item">
@@ -368,7 +415,7 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
         <!-- DESTACADO: PREMIOS OFICIALES DE LAS BASES -->
         <div class="prize-showcase">
           <div class="prize-content">
-            <span class="prize-header-badge">🏆 1er Premio Destacado</span>
+            <span class="prize-header-badge">🏆 1er Premio</span>
             <h2 class="prize-model-title">Samsung Galaxy S25 FE</h2>
             <p class="prize-pitch">
               Podrás ganar un fantástico <strong>Samsung Galaxy S25 FE</strong> para inmortalizar cada rincón de Cáceres con la mejor cámara y tecnología.
@@ -645,5 +692,6 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
 
   <!-- SCRIPT CON INTERACTIVIDAD LIGERA -->
   <script src="assets/js/main.js?v=<?php echo time(); ?>"></script>
+  <!-- Servidor: <?php echo date('Y-m-d H:i:s T (P)', $ahoraTimestamp); ?> | Estado: <?php echo htmlspecialchars($estado, ENT_QUOTES, 'UTF-8'); ?> (Modo: <?php echo $modoActivo; ?>) -->
 </body>
 </html>

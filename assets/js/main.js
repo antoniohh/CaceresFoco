@@ -35,10 +35,11 @@ function initCountdown() {
     var distance = targetDate - now;
 
     if (distance < 0) {
-      // Si ya empezó o pasó el evento
+      // Si ya venció la fecha objetivo
       var titleEl = document.querySelector('.countdown-title');
       if (titleEl) {
-        titleEl.innerHTML = '⚡ ¡El evento está en marcha! ¡Sube tus fotos!';
+        var expiredText = countdownContainer.getAttribute('data-expired-label') || '⚡ ¡Tiempo completado!';
+        titleEl.innerHTML = expiredText;
       }
       daysEl.textContent = '00';
       hoursEl.textContent = '00';

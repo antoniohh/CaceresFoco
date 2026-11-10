@@ -46,15 +46,50 @@ Las campañas en Qualifio se ejecutan dentro de su propio motor en `https://entr
 
 ## 3. Máquina de Estados (`config.json`)
 
-El flujo del concurso se controla desde [`config.json`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/config.json). La estructura esperada es:
+El flujo del concurso se controla desde [`config.json`](config.json). Admite modo manual y modo automatizado por calendario:
 
 ```json
 {
+  "control_por_fechas": false,
   "estado": "INSCRIPCIONES_ABIERTAS",
   "mostrar_temporizador": true,
-  "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00"
+  "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00",
+  "rotulo_temporizador": "Cuenta atrás para el inicio del rally fotográfico",
+  "fases_fechas": [
+    {
+      "estado": "CERRADO",
+      "hasta": "2026-11-16T00:00:00+01:00",
+      "mostrar_temporizador": true,
+      "fecha_objetivo_temporizador": "2026-11-16T00:00:00+01:00",
+      "rotulo_temporizador": "Cuenta atrás para la apertura de inscripciones"
+    },
+    {
+      "estado": "INSCRIPCIONES_ABIERTAS",
+      "hasta": "2026-11-21T12:00:00+01:00",
+      "mostrar_temporizador": true,
+      "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00",
+      "rotulo_temporizador": "Cuenta atrás para el inicio del rally fotográfico"
+    },
+    {
+      "estado": "CONCURSO_ABIERTO",
+      "hasta": "2026-11-21T15:00:00+01:00",
+      "mostrar_temporizador": true,
+      "fecha_objetivo_temporizador": "2026-11-21T15:00:00+01:00",
+      "rotulo_temporizador": "Tiempo restante para subir tus fotografías (hasta las 15:00h)"
+    },
+    {
+      "estado": "GALERIA_Y_GANADORES",
+      "hasta": null,
+      "mostrar_temporizador": false,
+      "fecha_objetivo_temporizador": null,
+      "rotulo_temporizador": ""
+    }
+  ]
 }
 ```
+
+- **`control_por_fechas: false`**: Modo manual (retrocompatible al 100%). El portal obedece a `"estado"`.
+- **`control_por_fechas: true`**: Modo automático. Las fases y la cuenta atrás transicionan solas según la hora oficial de Extremadura (`Europe/Madrid`).
 
 ### Matriz de Estados
 

@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.0.1-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.1.0-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -83,21 +83,32 @@ rally/
 
 ## ⚙️ Configuración (`config.json`)
 
-Edita el archivo [`config.json`](config.json) para controlar el comportamiento del portal en cualquier momento:
+Edita el archivo [`config.json`](config.json) para controlar el comportamiento del portal. Permite alternar entre modo manual y automatizado por calendario:
 
 ```json
 {
+  "control_por_fechas": false,
   "estado": "INSCRIPCIONES_ABIERTAS",
   "mostrar_temporizador": true,
-  "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00"
+  "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00",
+  "rotulo_temporizador": "Cuenta atrás para el inicio del rally fotográfico",
+  "fases_fechas": [
+    { "estado": "CERRADO",                "hasta": "2026-11-16T00:00:00+01:00" },
+    { "estado": "INSCRIPCIONES_ABIERTAS", "hasta": "2026-11-21T12:00:00+01:00" },
+    { "estado": "CONCURSO_ABIERTO",       "hasta": "2026-11-21T15:00:00+01:00" },
+    { "estado": "GALERIA_Y_GANADORES",    "hasta": null }
+  ]
 }
 ```
 
 | Parámetro | Valores posibles | Descripción |
 | :--- | :--- | :--- |
-| `estado` | `CERRADO`, `INSCRIPCIONES_ABIERTAS`, `CONCURSO_ABIERTO`, `GALERIA_Y_GANADORES` | Define la fase actual del certamen y la interacción de los botones. |
+| `control_por_fechas` | `true`, `false` | `true` para activar el avance automático según fechas; `false` para mandar manualmente con `estado`. |
+| `estado` | `CERRADO`, `INSCRIPCIONES_ABIERTAS`, `CONCURSO_ABIERTO`, `GALERIA_Y_GANADORES` | Estado forzado en modo manual. |
 | `mostrar_temporizador` | `true`, `false` | Muestra u oculta la caja de cuenta atrás. |
 | `fecha_objetivo_temporizador` | String ISO 8601 (ej: `2026-11-21T12:00:00+01:00`) | Fecha y hora límite hacia la que cuenta el reloj. |
+| `rotulo_temporizador` | String de texto | Título descriptivo sobre los dígitos de la cuenta atrás. |
+| `fases_fechas` | Array de objetos | Cronograma ordenado con las fechas límite (`hasta`) de cada fase. |
 
 ---
 
@@ -139,6 +150,14 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.1.0] - 2026-11-10
+- **Transición automática por fechas**: Soporte para cambio dinámico de fases mediante calendario en `config.json` (`control_por_fechas` y array `fases_fechas`).
+- **Retrocompatibilidad total (PHP 5.3)**: Mantenimiento del modo manual sin dependencias ni sintaxis moderna.
+- **Zona Horaria Oficial**: Configuración explícita de `Europe/Madrid` en PHP para evitar desfases en servidores con hora UTC.
+- **Temporizador adaptable**: Rótulos y objetivos de cuenta atrás individualizados por fase, y gestión elegante de expiración en `main.js`.
+- **Ajustes de Interfaz**: Simplificación de la etiqueta del premio principal a «🏆 1er Premio».
+- **Depuración silenciosa**: Comentario HTML al final del documento con la hora y modo de ejecución del servidor.
 
 ### [v1.0.1] - 2026-11-06
 - **Favicon oficial**: Inclusión de favicon corporativo de Diario HOY (`hoy/favicon.ico`).
