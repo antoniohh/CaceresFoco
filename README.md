@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.3.1-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.4.0-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -167,6 +167,12 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.4.0] - 2026-11-11
+- **Intervalos de Fases con Inicio y Fin Independientes (`desde` y `hasta`)**: Soporte completo para delimitar cada etapa mediante fecha de inicio y fecha de fin sin solapamiento en `[desde, hasta)`, garantizando transiciones exactas en calendario.
+- **Soporte de Cotas Indefinidas (`null`)**: Posibilidad de configurar `desde: null` (etapa inicial/previa sin cota inferior) y `hasta: null` (etapa final de ganadores permanente) mediante casillas de verificación dedicadas en el panel.
+- **Panel Administrativo con Doble Selector**: Controles `datetime-local` duales por etapa con atenuación y deshabilitación reactiva al activar el modo `null`.
+- **Motor de Resolución Temporal Optimizado**: Evaluación en servidor `[desde, hasta)` compatible al 100% con PHP 5.3 y detección limpia de fallbacks.
 
 ### [v1.3.1] - 2026-11-11
 - **Clarificación de Estados y Etapas en el Panel**: Corrección de duplicidad en los desplegables de selección de estado eliminando la opción redundante de "Fase 4" (`GALERIA_Y_GANADORES`) en la interfaz visual, manteniendo normalización transparente y retrocompatible en backend hacia `GANADORES_PUBLICADOS`.

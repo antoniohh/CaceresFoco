@@ -206,6 +206,7 @@ $defaultConfig = array(
     'fases_fechas' => array(
         array(
             'estado' => 'CERRADO',
+            'desde' => null,
             'hasta' => '2026-11-16T00:00:00+01:00',
             'mostrar_temporizador' => true,
             'fecha_objetivo_temporizador' => '2026-11-16T00:00:00+01:00',
@@ -213,6 +214,7 @@ $defaultConfig = array(
         ),
         array(
             'estado' => 'INSCRIPCIONES_ABIERTAS',
+            'desde' => '2026-11-16T00:00:00+01:00',
             'hasta' => '2026-11-21T12:00:00+01:00',
             'mostrar_temporizador' => true,
             'fecha_objetivo_temporizador' => '2026-11-21T12:00:00+01:00',
@@ -220,6 +222,7 @@ $defaultConfig = array(
         ),
         array(
             'estado' => 'CONCURSO_ABIERTO',
+            'desde' => '2026-11-21T12:00:00+01:00',
             'hasta' => '2026-11-21T15:00:00+01:00',
             'mostrar_temporizador' => true,
             'fecha_objetivo_temporizador' => '2026-11-21T15:00:00+01:00',
@@ -227,6 +230,7 @@ $defaultConfig = array(
         ),
         array(
             'estado' => 'GALERIA_ABIERTA',
+            'desde' => '2026-11-21T15:00:00+01:00',
             'hasta' => '2026-12-01T10:00:00+01:00',
             'mostrar_temporizador' => true,
             'fecha_objetivo_temporizador' => '2026-12-01T10:00:00+01:00',
@@ -234,6 +238,7 @@ $defaultConfig = array(
         ),
         array(
             'estado' => 'GANADORES_PUBLICADOS',
+            'desde' => '2026-12-01T10:00:00+01:00',
             'hasta' => null,
             'mostrar_temporizador' => false,
             'fecha_objetivo_temporizador' => null,
@@ -341,7 +346,11 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
                         $faseEstado = 'GANADORES_PUBLICADOS';
                     }
                     
-                    // Hasta
+                    // Desde (inicio)
+                    $desdeSinLimite = (isset($f['desde_null']) && $f['desde_null'] === '1');
+                    $desdeFecha = (isset($f['desde']) && !$desdeSinLimite) ? cf_normalize_iso_date($f['desde']) : null;
+
+                    // Hasta (fin)
                     $hastaSinLimite = (isset($f['hasta_null']) && $f['hasta_null'] === '1');
                     $hastaFecha = (isset($f['hasta']) && !$hastaSinLimite) ? cf_normalize_iso_date($f['hasta']) : null;
 
@@ -357,6 +366,7 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $fasesArr[] = array(
                         'estado' => $faseEstado,
+                        'desde' => $desdeFecha,
                         'hasta' => $hastaFecha,
                         'mostrar_temporizador' => $faseMostrarTemp,
                         'fecha_objetivo_temporizador' => $faseFechaObj,
@@ -456,9 +466,13 @@ if ($currentConfig['control_por_fechas'] && !empty($currentConfig['fases_fechas'
             continue;
         }
 
+        $desdeTimestamp = (!empty($fase['desde'])) ? strtotime($fase['desde']) : null;
         $hastaTimestamp = (!empty($fase['hasta'])) ? strtotime($fase['hasta']) : null;
 
-        if ($hastaTimestamp === null || $ahoraTimestamp < $hastaTimestamp) {
+        $desdeOk = ($desdeTimestamp === null || $ahoraTimestamp >= $desdeTimestamp);
+        $hastaOk = ($hastaTimestamp === null || $ahoraTimestamp < $hastaTimestamp);
+
+        if ($desdeOk && $hastaOk) {
             $estadoResuelto = strtoupper(trim($fase['estado']));
             if (isset($fase['mostrar_temporizador'])) {
                 $temporizadorResuelto = (bool)$fase['mostrar_temporizador'];
@@ -1454,6 +1468,8 @@ $hasBackup = file_exists($backupFile);
                 $fases = !empty($currentConfig['fases_fechas']) ? $currentConfig['fases_fechas'] : array();
                 foreach ($fases as $idx => $fase):
                   $isFaseActive = ($modoActivoReal === 'auto' && $faseActivaIndex === $idx);
+                  $desdeVal = isset($fase['desde']) ? $fase['desde'] : null;
+                  $hasDesde = ($desdeVal !== null && $desdeVal !== '');
                   $hastaVal = isset($fase['hasta']) ? $fase['hasta'] : null;
                   $hasHasta = ($hastaVal !== null && $hastaVal !== '');
                   $fechaObjVal = isset($fase['fecha_objetivo_temporizador']) ? $fase['fecha_objetivo_temporizador'] : null;
@@ -1479,8 +1495,8 @@ $hasBackup = file_exists($backupFile);
 
                   <div class="fase-grid">
                     <!-- Estado de la fase -->
-                    <div class="form-group">
-                      <label class="form-label">Estado asignado a esta fase:</label>
+                    <div class="form-group fase-grid-full">
+                      <label class="form-label">Estado asignado a esta etapa:</label>
                       <select name="fases[<?php echo $idx; ?>][estado]">
                         <?php foreach ($estadosValidos as $stKey => $stData): ?>
                           <option value="<?php echo $stKey; ?>" <?php echo ($stFase === $stKey) ? 'selected' : ''; ?>>
@@ -1490,13 +1506,23 @@ $hasBackup = file_exists($backupFile);
                       </select>
                     </div>
 
+                    <!-- Desde cuándo -->
+                    <div class="form-group">
+                      <label class="form-label">Válida desde (fecha y hora inicio):</label>
+                      <input type="datetime-local" class="input-desde" name="fases[<?php echo $idx; ?>][desde]" value="<?php echo htmlspecialchars(cf_format_for_input($desdeVal)); ?>" <?php echo (!$hasDesde) ? 'disabled style="opacity:0.5;"' : ''; ?>>
+                      <label class="checkbox-inline">
+                        <input type="checkbox" name="fases[<?php echo $idx; ?>][desde_null]" value="1" <?php echo (!$hasDesde) ? 'checked' : ''; ?> onchange="cfToggleDesdeNull(this)">
+                        Sin fecha de inicio (inicio indefinido / null)
+                      </label>
+                    </div>
+
                     <!-- Hasta cuándo -->
                     <div class="form-group">
                       <label class="form-label">Válida hasta (fecha y hora fin):</label>
                       <input type="datetime-local" class="input-hasta" name="fases[<?php echo $idx; ?>][hasta]" value="<?php echo htmlspecialchars(cf_format_for_input($hastaVal)); ?>" <?php echo (!$hasHasta) ? 'disabled style="opacity:0.5;"' : ''; ?>>
                       <label class="checkbox-inline">
                         <input type="checkbox" name="fases[<?php echo $idx; ?>][hasta_null]" value="1" <?php echo (!$hasHasta) ? 'checked' : ''; ?> onchange="cfToggleHastaNull(this)">
-                        Sin fecha fin (última fase indefinida / null)
+                        Sin fecha fin (fin indefinido / null)
                       </label>
                     </div>
 
@@ -1696,6 +1722,16 @@ $hasBackup = file_exists($backupFile);
       }
     }
 
+    // ALTERNAR "DESDE" SIN LÍMITE (NULL)
+    function cfToggleDesdeNull(cb) {
+      var faseItem = cb.closest('.fase-item');
+      var input = faseItem.querySelector('.input-desde');
+      if (input) {
+        input.disabled = cb.checked;
+        input.style.opacity = cb.checked ? '0.5' : '1';
+      }
+    }
+
     // ALTERNAR "HASTA" SIN LÍMITE (NULL)
     function cfToggleHastaNull(cb) {
       var faseItem = cb.closest('.fase-item');
@@ -1805,8 +1841,8 @@ $hasBackup = file_exists($backupFile);
           '</div>' +
         '</div>' +
         '<div class="fase-grid">' +
-          '<div class="form-group">' +
-            '<label class="form-label">Estado asignado a esta fase:</label>' +
+          '<div class="form-group fase-grid-full">' +
+            '<label class="form-label">Estado asignado a esta etapa:</label>' +
             '<select name="fases[' + newIndex + '][estado]">' +
               '<option value="CERRADO">CERRADO (Fase 0 - Previo / Espera)</option>' +
               '<option value="INSCRIPCIONES_ABIERTAS" selected>INSCRIPCIONES_ABIERTAS (Fase 1 - Registro Previo)</option>' +
@@ -1816,11 +1852,19 @@ $hasBackup = file_exists($backupFile);
             '</select>' +
           '</div>' +
           '<div class="form-group">' +
+            '<label class="form-label">Válida desde (fecha y hora inicio):</label>' +
+            '<input type="datetime-local" class="input-desde" name="fases[' + newIndex + '][desde]">' +
+            '<label class="checkbox-inline">' +
+              '<input type="checkbox" name="fases[' + newIndex + '][desde_null]" value="1" onchange="cfToggleDesdeNull(this)">' +
+              'Sin fecha de inicio (inicio indefinido / null)' +
+            '</label>' +
+          '</div>' +
+          '<div class="form-group">' +
             '<label class="form-label">Válida hasta (fecha y hora fin):</label>' +
             '<input type="datetime-local" class="input-hasta" name="fases[' + newIndex + '][hasta]">' +
             '<label class="checkbox-inline">' +
               '<input type="checkbox" name="fases[' + newIndex + '][hasta_null]" value="1" onchange="cfToggleHastaNull(this)">' +
-              'Sin fecha fin (última fase indefinida / null)' +
+              'Sin fecha fin (fin indefinido / null)' +
             '</label>' +
           '</div>' +
           '<div class="form-group fase-grid-full">' +

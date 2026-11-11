@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.3.1 (Compatible con PHP 5.3+)
+ * @version   1.4.0 (Compatible con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -68,15 +68,20 @@ if ($config['control_por_fechas'] && !empty($config['fases_fechas'])) {
             continue;
         }
 
+        $desdeTimestamp = (!empty($fase['desde'])) ? strtotime($fase['desde']) : null;
         $hastaTimestamp = (!empty($fase['hasta'])) ? strtotime($fase['hasta']) : null;
 
-        // Si 'hasta' es null o la hora evaluada es anterior a 'hasta', esta es la fase activa
-        if ($hastaTimestamp === null || $ahoraTimestamp < $hastaTimestamp) {
+        // Comprobación de intervalo de fechas [desde, hasta)
+        $desdeOk = ($desdeTimestamp === null || $ahoraTimestamp >= $desdeTimestamp);
+        $hastaOk = ($hastaTimestamp === null || $ahoraTimestamp < $hastaTimestamp);
+
+        // Si la hora evaluada cumple con el inicio y fin de la etapa, es la fase activa
+        if ($desdeOk && $hastaOk) {
             $config['estado'] = strtoupper(trim($fase['estado']));
             if (isset($fase['mostrar_temporizador'])) {
                 $config['mostrar_temporizador'] = (bool)$fase['mostrar_temporizador'];
             }
-            if (isset($fase['fecha_objetivo_temporizador'])) {
+            if (isset($fase['fecha_objetivo_temporizador']) && !empty($fase['fecha_objetivo_temporizador'])) {
                 $config['fecha_objetivo_temporizador'] = $fase['fecha_objetivo_temporizador'];
             } elseif ($hastaTimestamp !== null) {
                 $config['fecha_objetivo_temporizador'] = $fase['hasta'];

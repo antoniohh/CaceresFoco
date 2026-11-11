@@ -61,6 +61,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
   "fases_fechas": [
     {
       "estado": "CERRADO",
+      "desde": null,
       "hasta": "2026-11-16T00:00:00+01:00",
       "mostrar_temporizador": true,
       "fecha_objetivo_temporizador": "2026-11-16T00:00:00+01:00",
@@ -68,6 +69,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
     },
     {
       "estado": "INSCRIPCIONES_ABIERTAS",
+      "desde": "2026-11-16T00:00:00+01:00",
       "hasta": "2026-11-21T12:00:00+01:00",
       "mostrar_temporizador": true,
       "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00",
@@ -75,6 +77,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
     },
     {
       "estado": "CONCURSO_ABIERTO",
+      "desde": "2026-11-21T12:00:00+01:00",
       "hasta": "2026-11-21T15:00:00+01:00",
       "mostrar_temporizador": true,
       "fecha_objetivo_temporizador": "2026-11-21T15:00:00+01:00",
@@ -82,6 +85,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
     },
     {
       "estado": "GALERIA_ABIERTA",
+      "desde": "2026-11-21T15:00:00+01:00",
       "hasta": "2026-12-01T10:00:00+01:00",
       "mostrar_temporizador": true,
       "fecha_objetivo_temporizador": "2026-12-01T10:00:00+01:00",
@@ -89,6 +93,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
     },
     {
       "estado": "GANADORES_PUBLICADOS",
+      "desde": "2026-12-01T10:00:00+01:00",
       "hasta": null,
       "mostrar_temporizador": false,
       "fecha_objetivo_temporizador": null,
