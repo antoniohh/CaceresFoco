@@ -281,6 +281,18 @@ if (file_exists($configFile)) {
     }
 }
 
+// Normalización automática de estados heredados/retrocompatibles
+if (isset($currentConfig['estado']) && $currentConfig['estado'] === 'GALERIA_Y_GANADORES') {
+    $currentConfig['estado'] = 'GANADORES_PUBLICADOS';
+}
+if (!empty($currentConfig['fases_fechas']) && is_array($currentConfig['fases_fechas'])) {
+    foreach ($currentConfig['fases_fechas'] as $fIdx => $fItem) {
+        if (isset($fItem['estado']) && $fItem['estado'] === 'GALERIA_Y_GANADORES') {
+            $currentConfig['fases_fechas'][$fIdx]['estado'] = 'GANADORES_PUBLICADOS';
+        }
+    }
+}
+
 if ($configRawString === '') {
     $configRawString = cf_pretty_json($currentConfig);
 }
@@ -305,6 +317,9 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // 2. Estado manual
             $newConfig['estado'] = isset($_POST['estado']) ? strtoupper(trim($_POST['estado'])) : 'INSCRIPCIONES_ABIERTAS';
+            if ($newConfig['estado'] === 'GALERIA_Y_GANADORES') {
+                $newConfig['estado'] = 'GANADORES_PUBLICADOS';
+            }
 
             // 3. Temporizador general (Modo Manual)
             $newConfig['mostrar_temporizador'] = (isset($_POST['mostrar_temporizador']) && $_POST['mostrar_temporizador'] === '1');
@@ -322,6 +337,9 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
                         continue;
                     }
                     $faseEstado = isset($f['estado']) ? strtoupper(trim($f['estado'])) : 'CERRADO';
+                    if ($faseEstado === 'GALERIA_Y_GANADORES') {
+                        $faseEstado = 'GANADORES_PUBLICADOS';
+                    }
                     
                     // Hasta
                     $hastaSinLimite = (isset($f['hasta_null']) && $f['hasta_null'] === '1');
@@ -485,11 +503,6 @@ $estadosValidos = array(
         'label' => 'GANADORES_PUBLICADOS (Fase 4 - Ganadores Oficiales)',
         'badge' => 'badge-results',
         'desc' => 'Fallo oficial anunciado. Botón 3 activo para explorar las fotos premiadas.'
-    ),
-    'GALERIA_Y_GANADORES' => array(
-        'label' => 'GALERIA_Y_GANADORES (Alias retrocompatible Fase 4)',
-        'badge' => 'badge-results',
-        'desc' => 'Alias compatible con versiones previas para la fase final con ganadores proclamados.'
     )
 );
 
@@ -1323,7 +1336,7 @@ $hasBackup = file_exists($backupFile);
         <div>
           <span class="mode-indicator">
             <?php if ($modoActivoReal === 'auto'): ?>
-              📅 Modo Automático por Fechas (Fase #<?php echo ($faseActivaIndex !== null) ? ($faseActivaIndex + 1) : '?'; ?>)
+              📅 Modo Automático por Fechas (Etapa #<?php echo ($faseActivaIndex !== null) ? ($faseActivaIndex + 1) : '?'; ?>)
             <?php else: ?>
               🔒 Modo Manual Fijo
             <?php endif; ?>
@@ -1452,7 +1465,7 @@ $hasBackup = file_exists($backupFile);
                 <div class="fase-item <?php echo ($isFaseActive) ? 'active-now' : ''; ?>" data-index="<?php echo $idx; ?>">
                   <div class="fase-header">
                     <div class="fase-title">
-                      <span class="fase-number-badge">FASE #<span class="fase-num"><?php echo ($idx + 1); ?></span></span>
+                      <span class="fase-number-badge">ETAPA #<span class="fase-num"><?php echo ($idx + 1); ?></span></span>
                       <?php if ($isFaseActive): ?>
                         <span class="status-badge badge-live">🔴 ACTIVA AHORA</span>
                       <?php endif; ?>
@@ -1783,7 +1796,7 @@ $hasBackup = file_exists($backupFile);
       div.innerHTML = 
         '<div class="fase-header">' +
           '<div class="fase-title">' +
-            '<span class="fase-number-badge">FASE #<span class="fase-num">' + (newIndex + 1) + '</span></span>' +
+            '<span class="fase-number-badge">ETAPA #<span class="fase-num">' + (newIndex + 1) + '</span></span>' +
           '</div>' +
           '<div class="fase-actions">' +
             '<button type="button" class="btn-icon" title="Subir fase" onclick="cfMoveFase(this, -1)">▲</button>' +
