@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.2.1-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.3.0-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -25,10 +25,11 @@ Las campañas del concurso están gestionadas mediante la plataforma **Qualifio*
 
 - **Compatibilidad con PHP 5.3+**: Diseñado para servidores legacy y modernos (sin sintaxis corta de arrays, funciones obsoletas ni dependencias externas).
 - **Gestión de Estados por JSON (`config.json`)**:
-  - `CERRADO`: Anuncio del concurso, botones en espera.
-  - `INSCRIPCIONES_ABIERTAS`: Botón de inscripción destacado en rojo con pulso; las demás fases en espera.
-  - `CONCURSO_ABIERTO`: Rally en curso; botón de subida de fotos destacado como acción principal.
-  - `GALERIA_Y_GANADORES`: Fallo del jurado publicado y galería visible.
+  - `CERRADO` (Fase 0): Previo al concurso, botones en espera o cuenta atrás hacia apertura.
+  - `INSCRIPCIONES_ABIERTAS` (Fase 1): Botón 1 de inscripción destacado en rojo con pulso; las demás fases en espera.
+  - `CONCURSO_ABIERTO` (Fase 2): Rally en curso (12:00 a 15:00h); botón 2 de subida de fotos destacado como acción principal.
+  - `GALERIA_ABIERTA` (Fase 3): Galería pública de fotos participantes mientras el jurado delibera (21 nov 15:00h - 1 dic) con cuenta atrás hacia el fallo oficial.
+  - `GANADORES_PUBLICADOS` (Fase 4): Fallo oficial anunciado y galería completa premiada (1 dic en adelante).
 - **Temporizador / Cuenta Atrás configurable**: Reloj dinámico en tiempo real que se puede activar o desactivar (`true`/`false`) y apuntar a cualquier fecha u hora ISO.
 - **Identidad Visual Corporativa**:
   - Cabecera y pie nativos de **Diario HOY** (línea 1200px `#202020`).
@@ -166,6 +167,13 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.3.0] - 2026-11-11
+- **Separación de Ciclo de Vida en 5 Fases (Fase 0 a Fase 4)**: Introducción de la Fase 3 (`GALERIA_ABIERTA`) y Fase 4 (`GANADORES_PUBLICADOS`), cubriendo el intervalo editorial del 21 de noviembre a las 15:00h al 1 de diciembre para exhibición de fotografías participantes mientras el jurado delibera.
+- **Temporizador de Expectación de Ganadores**: Cuenta atrás configurable hacia el fallo oficial y publicación en Diario HOY (1 de diciembre de 2026).
+- **Badge y Diseño Específico (`badge-gallery`)**: Nueva identidad visual en azul cian con animación de pulso `@keyframes pulseDotCyan` para el periodo de deliberación del jurado.
+- **Panel Administrativo Actualizado**: Soporte completo para `GALERIA_ABIERTA` y `GANADORES_PUBLICADOS` en el selector manual, tarjetas de estado, paleta de colores y generador interactivo de calendario en JS, manteniendo retrocompatibilidad con `GALERIA_Y_GANADORES`.
+- **Compatibilidad Continua con Qualifio**: Enrutamiento transparente hacia la campaña permanente de Qualifio `/galeria/` tanto en la Fase 3 como en la Fase 4 sin requerir modificaciones en el gestor de Qualifio.
 
 ### [v1.2.1] - 2026-11-11
 - **Corrección de detección HTTPS en Producción (Proxy / CDN)**: Soporte completo para terminación SSL y proxies inversos (Cloudflare, Akamai, Varnish, Nginx, balanceadores de Vocento) mediante la inspección de cabeceras `HTTP_X_FORWARDED_PROTO`, `HTTP_X_FORWARDED_SSL`, `HTTP_FRONT_END_HTTPS`, `HTTP_X_FORWARDED_PORT` y `SERVER_PORT`.

@@ -54,7 +54,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
 ```json
 {
   "control_por_fechas": false,
-  "estado": "INSCRIPCIONES_ABIERTAS",
+  "estado": "CERRADO",
   "mostrar_temporizador": true,
   "fecha_objetivo_temporizador": "2026-11-21T12:00:00+01:00",
   "rotulo_temporizador": "Cuenta atrás para el inicio del rally fotográfico",
@@ -81,7 +81,14 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
       "rotulo_temporizador": "Tiempo restante para subir tus fotografías (hasta las 15:00h)"
     },
     {
-      "estado": "GALERIA_Y_GANADORES",
+      "estado": "GALERIA_ABIERTA",
+      "hasta": "2026-12-01T10:00:00+01:00",
+      "mostrar_temporizador": true,
+      "fecha_objetivo_temporizador": "2026-12-01T10:00:00+01:00",
+      "rotulo_temporizador": "Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)"
+    },
+    {
+      "estado": "GANADORES_PUBLICADOS",
       "hasta": null,
       "mostrar_temporizador": false,
       "fecha_objetivo_temporizador": null,
@@ -94,14 +101,18 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
 - **`control_por_fechas: false`**: Modo manual (retrocompatible al 100%). El portal obedece a `"estado"`.
 - **`control_por_fechas: true`**: Modo automático. Las fases y la cuenta atrás transicionan solas según la hora oficial de Extremadura (`Europe/Madrid`).
 
-### Matriz de Estados
+### Matriz de Estados (Fases 0 a 4)
 
-| Estado | Badge Hero | Botón 1 (Inscripción) | Botón 2 (Subir Fotos) | Botón 3 (Galería) |
-| :--- | :--- | :--- | :--- | :--- |
-| `CERRADO` | 🟡 Próximamente (`badge-closed`) | Inactivo (`tag-soon`) | Inactivo (`tag-closed`) | Inactivo (`tag-closed`) |
-| `INSCRIPCIONES_ABIERTAS` | 🟢 Inscripciones Abiertas (`badge-open`) | **Activo Primario** (`tag-open`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) |
-| `CONCURSO_ABIERTO` | 🔴 Rally en Marcha (`badge-live`) | Inactivo (`tag-done`) | **Activo Primario** (`tag-live`) | Inactivo (`tag-soon`) |
-| `GALERIA_Y_GANADORES` | 🏆 Ganadores y Galería (`badge-results`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Primario** (`tag-open`) |
+| Fase | Estado | Badge Hero | Botón 1 (Inscripción) | Botón 2 (Subir Fotos) | Botón 3 (Galería) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Fase 0: Previo** | `CERRADO` | 🟡 Próximamente (`badge-closed`) | Inactivo (`tag-soon`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) |
+| **Fase 1: Registro** | `INSCRIPCIONES_ABIERTAS` | 🟢 Inscripciones Abiertas (`badge-open`) | **Activo Primario** (`tag-open`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) |
+| **Fase 2: Concurso** | `CONCURSO_ABIERTO` | 🔴 Rally en Marcha (`badge-live`) | Inactivo (`tag-done`) | **Activo Primario** (`tag-live`) | Inactivo (`tag-soon`) |
+| **Fase 3: Galería** | `GALERIA_ABIERTA` | 🖼️ Galería Abierta (`badge-gallery`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Primario** (`tag-open`) |
+| **Fase 4: Ganadores** | `GANADORES_PUBLICADOS`<br>*(alias `GALERIA_Y_GANADORES`)* | 🏆 Ganadores Oficiales (`badge-results`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Primario** (`tag-open`) |
+
+> [!NOTE]
+> En Qualifio, la campaña de galería (`/galeria/`) es continua desde el cierre de subida el 21 de noviembre; el 1 de diciembre simplemente se actualiza en Qualifio para destacar las fotos premiadas. La separación entre **Fase 3** (`GALERIA_ABIERTA`) y **Fase 4** (`GANADORES_PUBLICADOS`) en este portal hub permite mostrar la cuenta atrás hacia el fallo del jurado y ajustar los titulares editoriales de la landing.
 
 #### Comportamiento de Botones Inactivos
 Cuando un botón no está activo según el estado, se renderiza con la clase `.card-disabled`, cursor `not-allowed`, enlace no interactivo y una etiqueta textual descriptiva (*Próximamente*, *Cerrado* o *Finalizado*).

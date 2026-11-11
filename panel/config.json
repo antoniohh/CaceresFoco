@@ -27,7 +27,14 @@
             "rotulo_temporizador": "Tiempo restante para subir tus fotografías (hasta las 15:00h)"
         },
         {
-            "estado": "GALERIA_Y_GANADORES",
+            "estado": "GALERIA_ABIERTA",
+            "hasta": "2026-12-01T10:00:00+01:00",
+            "mostrar_temporizador": true,
+            "fecha_objetivo_temporizador": "2026-12-01T10:00:00+01:00",
+            "rotulo_temporizador": "Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)"
+        },
+        {
+            "estado": "GANADORES_PUBLICADOS",
             "hasta": null,
             "mostrar_temporizador": false,
             "fecha_objetivo_temporizador": null,
@@ -40,13 +47,15 @@
             "CERRADO",
             "INSCRIPCIONES_ABIERTAS",
             "CONCURSO_ABIERTO",
-            "GALERIA_Y_GANADORES"
+            "GALERIA_ABIERTA",
+            "GANADORES_PUBLICADOS"
         ],
         "descripcion_estados": {
-            "CERRADO": "Concurso cerrado o próximo. Fases indicadas como Cerradas/Próximamente.",
-            "INSCRIPCIONES_ABIERTAS": "Fase 1 (Inscripción) activa y destacada en rojo. Las demás en espera.",
-            "CONCURSO_ABIERTO": "Rally en curso (12:00 a 15:00h). Fase 2 (Subir Fotos) activa y destacada en rojo.",
-            "GALERIA_Y_GANADORES": "Fallo del jurado publicado y galería visible. Fase 3 activa y destacada."
+            "CERRADO": "Fase 0: Previo al concurso. Inscripciones cerradas o cuenta atrás para apertura.",
+            "INSCRIPCIONES_ABIERTAS": "Fase 1: Registro previo (16-21 nov). Botón 1 activo y destacado.",
+            "CONCURSO_ABIERTO": "Fase 2: Rally en marcha (21 nov, 12:00-15:00h). Botón 2 (Subir fotos) activo y destacado.",
+            "GALERIA_ABIERTA": "Fase 3: Galería abierta y deliberación del jurado (21 nov 15:00h - 1 dic). Botón 3 activo para ver fotos participantes con cuenta atrás al fallo de ganadores.",
+            "GANADORES_PUBLICADOS": "Fase 4: Ganadores oficiales y selección premiada publicada (1 dic en adelante). Botón 3 activo."
         },
         "mostrar_temporizador": "true para mostrar la cuenta atrás, false para ocultarla."
     }

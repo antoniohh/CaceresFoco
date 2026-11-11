@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.2.1 (Compatible con PHP 5.3+)
+ * @version   1.3.0 (Compatible con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -173,13 +173,39 @@ switch ($estado) {
         $btn2['badge'] = '¡Abierto ahora!';
         $btn2['badge_class'] = 'tag-live';
 
-        $btn3['subtexto'] = 'El jurado deliberará tras el cierre del plazo';
+        $btn3['subtexto'] = 'La galería se abrirá a las 15:00h tras el rally';
         $btn3['badge'] = 'Próximamente';
         $btn3['badge_class'] = 'tag-soon';
         break;
 
+    case 'GALERIA_ABIERTA':
+        $badgeTexto = 'Galería de Fotos Abierta · Deliberación del Jurado';
+        $badgeClase = 'badge-gallery';
+
+        $btn1['activo'] = false;
+        $btn1['destacado'] = false;
+        $btn1['subtexto'] = 'Plazo de inscripción completado';
+        $btn1['badge'] = 'Finalizado';
+        $btn1['badge_class'] = 'tag-done';
+
+        $btn2['activo'] = false;
+        $btn2['destacado'] = false;
+        $btn2['subtexto'] = 'Plazo de subida cerrado a las 15:00h';
+        $btn2['badge'] = 'Cerrado';
+        $btn2['badge_class'] = 'tag-closed';
+
+        $btn3['activo'] = true;
+        $btn3['destacado'] = true;
+        $btn3['titulo'] = '3. Ver Galería de Fotos';
+        $btn3['subtexto'] = 'Explora todas las fotografías participantes · Fallo del jurado el 1 de dic.';
+        $btn3['badge'] = '¡Abierta ahora!';
+        $btn3['badge_class'] = 'tag-open';
+        $btn3['icono'] = '📷';
+        break;
+
+    case 'GANADORES_PUBLICADOS':
     case 'GALERIA_Y_GANADORES':
-        $badgeTexto = 'Ganadores y Galería Publicada';
+        $badgeTexto = '¡Ganadores Oficiales Publicados!';
         $badgeClase = 'badge-results';
 
         $btn1['activo'] = false;
@@ -196,9 +222,11 @@ switch ($estado) {
 
         $btn3['activo'] = true;
         $btn3['destacado'] = true;
-        $btn3['subtexto'] = 'Explora las fotos premiadas y la selección oficial';
-        $btn3['badge'] = '¡Visible ahora!';
+        $btn3['titulo'] = '3. Ver Ganadores y Galería';
+        $btn3['subtexto'] = 'Descubre las fotos premiadas y el fallo oficial del jurado';
+        $btn3['badge'] = '¡Ganadores aquí!';
         $btn3['badge_class'] = 'tag-open';
+        $btn3['icono'] = '🏆';
         break;
 }
 

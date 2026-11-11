@@ -226,7 +226,14 @@ $defaultConfig = array(
             'rotulo_temporizador' => 'Tiempo restante para subir tus fotografías (hasta las 15:00h)'
         ),
         array(
-            'estado' => 'GALERIA_Y_GANADORES',
+            'estado' => 'GALERIA_ABIERTA',
+            'hasta' => '2026-12-01T10:00:00+01:00',
+            'mostrar_temporizador' => true,
+            'fecha_objetivo_temporizador' => '2026-12-01T10:00:00+01:00',
+            'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)'
+        ),
+        array(
+            'estado' => 'GANADORES_PUBLICADOS',
             'hasta' => null,
             'mostrar_temporizador' => false,
             'fecha_objetivo_temporizador' => null,
@@ -239,13 +246,15 @@ $defaultConfig = array(
             'CERRADO',
             'INSCRIPCIONES_ABIERTAS',
             'CONCURSO_ABIERTO',
-            'GALERIA_Y_GANADORES'
+            'GALERIA_ABIERTA',
+            'GANADORES_PUBLICADOS'
         ),
         'descripcion_estados' => array(
-            'CERRADO' => 'Concurso cerrado o próximo. Fases indicadas como Cerradas/Próximamente.',
-            'INSCRIPCIONES_ABIERTAS' => 'Fase 1 (Inscripción) activa y destacada en rojo. Las demás en espera.',
-            'CONCURSO_ABIERTO' => 'Rally en curso (12:00 a 15:00h). Fase 2 (Subir Fotos) activa y destacada en rojo.',
-            'GALERIA_Y_GANADORES' => 'Fallo del jurado publicado y galería visible. Fase 3 activa y destacada.'
+            'CERRADO' => 'Fase 0: Previo al concurso. Inscripciones cerradas o cuenta atrás para apertura.',
+            'INSCRIPCIONES_ABIERTAS' => 'Fase 1: Registro previo (16-21 nov). Botón 1 activo y destacado.',
+            'CONCURSO_ABIERTO' => 'Fase 2: Rally en marcha (21 nov, 12:00-15:00h). Botón 2 (Subir fotos) activo y destacado.',
+            'GALERIA_ABIERTA' => 'Fase 3: Galería abierta y deliberación del jurado (21 nov 15:00h - 1 dic). Botón 3 activo para ver fotos participantes con cuenta atrás al fallo.',
+            'GANADORES_PUBLICADOS' => 'Fase 4: Ganadores oficiales y selección premiada publicada (1 dic en adelante). Botón 3 activo.'
         ),
         'mostrar_temporizador' => 'true para mostrar la cuenta atrás, false para ocultarla.'
     )
@@ -453,24 +462,34 @@ if ($currentConfig['control_por_fechas'] && !empty($currentConfig['fases_fechas'
 // Estados oficiales disponibles
 $estadosValidos = array(
     'CERRADO' => array(
-        'label' => 'CERRADO (Próximamente / Espera)',
+        'label' => 'CERRADO (Fase 0 - Previo / Espera)',
         'badge' => 'badge-closed',
-        'desc' => 'Concurso no iniciado o finalizado. Inscripción y subida inactivas.'
+        'desc' => 'Concurso no iniciado o en pausa. Botones de participación inactivos.'
     ),
     'INSCRIPCIONES_ABIERTAS' => array(
-        'label' => 'INSCRIPCIONES_ABIERTAS (Fase 1)',
+        'label' => 'INSCRIPCIONES_ABIERTAS (Fase 1 - Registro Previo)',
         'badge' => 'badge-open',
         'desc' => 'Botón 1 (Inscripción) activo y destacado en rojo. Botones 2 y 3 inactivos.'
     ),
     'CONCURSO_ABIERTO' => array(
-        'label' => 'CONCURSO_ABIERTO (Rally en Marcha / Fase 2)',
+        'label' => 'CONCURSO_ABIERTO (Fase 2 - Rally en Marcha)',
         'badge' => 'badge-live',
         'desc' => 'Día del rally (12:00 a 15:00h). Botón 2 (Subir Fotos) activo y destacado.'
     ),
-    'GALERIA_Y_GANADORES' => array(
-        'label' => 'GALERIA_Y_GANADORES (Fase 3)',
+    'GALERIA_ABIERTA' => array(
+        'label' => 'GALERIA_ABIERTA (Fase 3 - Galería / Deliberación)',
+        'badge' => 'badge-gallery',
+        'desc' => 'Fotos participantes en exposición pública mientras el jurado delibera. Botón 3 activo.'
+    ),
+    'GANADORES_PUBLICADOS' => array(
+        'label' => 'GANADORES_PUBLICADOS (Fase 4 - Ganadores Oficiales)',
         'badge' => 'badge-results',
-        'desc' => 'Ganadores oficiales proclamados. Botón 3 (Galería) activo y destacado.'
+        'desc' => 'Fallo oficial anunciado. Botón 3 activo para explorar las fotos premiadas.'
+    ),
+    'GALERIA_Y_GANADORES' => array(
+        'label' => 'GALERIA_Y_GANADORES (Alias retrocompatible Fase 4)',
+        'badge' => 'badge-results',
+        'desc' => 'Alias compatible con versiones previas para la fase final con ganadores proclamados.'
     )
 );
 
@@ -512,6 +531,8 @@ $hasBackup = file_exists($backupFile);
       --state-closed-bg: #fffbeb;
       --state-results: #8b5cf6;
       --state-results-bg: #f5f3ff;
+      --state-gallery: #0284c7;
+      --state-gallery-bg: #f0f9ff;
       
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -688,6 +709,8 @@ $hasBackup = file_exists($backupFile);
     .dot-closed::after { background-color: var(--state-closed); }
     .dot-results { background-color: var(--state-results); }
     .dot-results::after { background-color: var(--state-results); }
+    .dot-gallery { background-color: var(--state-gallery); }
+    .dot-gallery::after { background-color: var(--state-gallery); }
 
     .live-title-group h2 {
       margin: 0;
@@ -718,6 +741,7 @@ $hasBackup = file_exists($backupFile);
     .badge-live { background: var(--state-live-bg); color: #991b1b; border: 1px solid #fecaca; }
     .badge-closed { background: var(--state-closed-bg); color: #92400e; border: 1px solid #fde68a; }
     .badge-results { background: var(--state-results-bg); color: #5b21b6; border: 1px solid #ddd6fe; }
+    .badge-gallery { background: var(--state-gallery-bg); color: #075985; border: 1px solid #bae6fd; }
 
     .mode-indicator {
       display: inline-flex;
@@ -1276,7 +1300,8 @@ $hasBackup = file_exists($backupFile);
             $dotClass = 'dot-closed';
             if ($estadoResuelto === 'INSCRIPCIONES_ABIERTAS') $dotClass = 'dot-open';
             elseif ($estadoResuelto === 'CONCURSO_ABIERTO') $dotClass = 'dot-live';
-            elseif ($estadoResuelto === 'GALERIA_Y_GANADORES') $dotClass = 'dot-results';
+            elseif ($estadoResuelto === 'GALERIA_ABIERTA') $dotClass = 'dot-gallery';
+            elseif ($estadoResuelto === 'GANADORES_PUBLICADOS' || $estadoResuelto === 'GALERIA_Y_GANADORES') $dotClass = 'dot-results';
           ?>
           <span class="pulse-dot <?php echo $dotClass; ?>"></span>
           <div class="live-title-group">
@@ -1770,10 +1795,11 @@ $hasBackup = file_exists($backupFile);
           '<div class="form-group">' +
             '<label class="form-label">Estado asignado a esta fase:</label>' +
             '<select name="fases[' + newIndex + '][estado]">' +
-              '<option value="CERRADO">CERRADO (Próximamente / Espera)</option>' +
-              '<option value="INSCRIPCIONES_ABIERTAS" selected>INSCRIPCIONES_ABIERTAS (Fase 1)</option>' +
-              '<option value="CONCURSO_ABIERTO">CONCURSO_ABIERTO (Rally en Marcha / Fase 2)</option>' +
-              '<option value="GALERIA_Y_GANADORES">GALERIA_Y_GANADORES (Fase 3)</option>' +
+              '<option value="CERRADO">CERRADO (Fase 0 - Previo / Espera)</option>' +
+              '<option value="INSCRIPCIONES_ABIERTAS" selected>INSCRIPCIONES_ABIERTAS (Fase 1 - Registro Previo)</option>' +
+              '<option value="CONCURSO_ABIERTO">CONCURSO_ABIERTO (Fase 2 - Rally en Marcha)</option>' +
+              '<option value="GALERIA_ABIERTA">GALERIA_ABIERTA (Fase 3 - Galería / Deliberación)</option>' +
+              '<option value="GANADORES_PUBLICADOS">GANADORES_PUBLICADOS (Fase 4 - Ganadores Oficiales)</option>' +
             '</select>' +
           '</div>' +
           '<div class="form-group">' +
