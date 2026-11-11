@@ -10,6 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
+ * @version   1.4.1 (Compatible con PHP 5.3+)
  *
  * Mono-archivo autocontenido (Backend PHP + Frontend HTML/CSS/JS)
  * Compatible estrictamente con PHP 5.3+
@@ -328,7 +329,7 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // 3. Temporizador general (Modo Manual)
             $newConfig['mostrar_temporizador'] = (isset($_POST['mostrar_temporizador']) && $_POST['mostrar_temporizador'] === '1');
-            
+
             $fechaObjManual = isset($_POST['fecha_objetivo_temporizador']) ? trim($_POST['fecha_objetivo_temporizador']) : '';
             $newConfig['fecha_objetivo_temporizador'] = cf_normalize_iso_date($fechaObjManual);
 
@@ -345,7 +346,7 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($faseEstado === 'GALERIA_Y_GANADORES') {
                         $faseEstado = 'GANADORES_PUBLICADOS';
                     }
-                    
+
                     // Desde (inicio)
                     $desdeSinLimite = (isset($f['desde_null']) && $f['desde_null'] === '1');
                     $desdeFecha = (isset($f['desde']) && !$desdeSinLimite) ? cf_normalize_iso_date($f['desde']) : null;
@@ -405,10 +406,40 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
         // ACCIÓN: GUARDAR DESDE EL EDITOR RAW JSON
         else if ($action === 'save_raw') {
             $rawInput = isset($_POST['raw_json']) ? trim($_POST['raw_json']) : '';
+
+            // 1. Limpieza de magic_quotes_gpc si PHP lo tiene activo
+            if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc()) {
+                $rawInput = stripslashes($rawInput);
+            }
+
+            // 2. Eliminar BOM UTF-8 y normalizar espacios en blanco / saltos de línea invisibles
+            $rawInput = preg_replace('/^\xEF\xBB\xBF/', '', $rawInput);
+            // Reemplaza espacios de no-separación (NBSP UTF-8) por espacios estándar
+            $rawInput = str_replace("\xC2\xA0", ' ', $rawInput);
+
             $decoded = json_decode($rawInput, true);
 
+            // Obtener el mensaje exacto de error si falla json_decode
+            $jsonErrorMsg = '';
+            if (function_exists('json_last_error_msg')) {
+                $jsonErrorMsg = json_last_error_msg();
+            } elseif (function_exists('json_last_error')) {
+                $errors = array(
+                    JSON_ERROR_NONE => 'Sin errores',
+                    JSON_ERROR_DEPTH => 'Límite de profundidad excedido',
+                    JSON_ERROR_STATE_MISMATCH => 'Estado o modo no válido',
+                    JSON_ERROR_CTRL_CHAR => 'Carácter de control no válido / no imprimible',
+                    JSON_ERROR_SYNTAX => 'Error de sintaxis'
+                );
+                if (defined('JSON_ERROR_UTF8')) {
+                    $errors[JSON_ERROR_UTF8] = 'Caracteres UTF-8 mal formados';
+                }
+                $errCode = json_last_error();
+                $jsonErrorMsg = isset($errors[$errCode]) ? $errors[$errCode] : 'Error desconocido (' . $errCode . ')';
+            }
+
             if ($decoded === null && !empty($rawInput)) {
-                $msgError = 'Error de sintaxis JSON: El texto introducido no es un JSON válido.';
+                $msgError = 'Error de sintaxis JSON: ' . htmlspecialchars($jsonErrorMsg);
             } else if (!is_array($decoded)) {
                 $msgError = 'El JSON debe representar un objeto raíz con clave-valor.';
             } else {
@@ -539,7 +570,7 @@ $hasBackup = file_exists($backupFile);
       --brand-red-dark: #b80000;
       --brand-red-light: #fff1f1;
       --brand-red-border: #fca5a5;
-      
+
       --color-slate-900: #0f172a;
       --color-slate-800: #1e293b;
       --color-slate-700: #334155;
@@ -549,7 +580,7 @@ $hasBackup = file_exists($backupFile);
       --color-slate-200: #e2e8f0;
       --color-slate-100: #f1f5f9;
       --color-slate-50: #f8fafc;
-      
+
       --state-open: #10b981;
       --state-open-bg: #ecfdf5;
       --state-live: #ef4444;
@@ -560,7 +591,7 @@ $hasBackup = file_exists($backupFile);
       --state-results-bg: #f5f3ff;
       --state-gallery: #0284c7;
       --state-gallery-bg: #f0f9ff;
-      
+
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
@@ -574,7 +605,7 @@ $hasBackup = file_exists($backupFile);
       padding: 0;
       font-family: var(--font-sans);
       background-color: #0b0f19;
-      background-image: 
+      background-image:
         radial-gradient(at 10% 20%, rgba(206, 0, 0, 0.08) 0px, transparent 50%),
         radial-gradient(at 90% 80%, rgba(30, 41, 59, 0.4) 0px, transparent 50%);
       color: var(--color-slate-800);
@@ -1464,7 +1495,7 @@ $hasBackup = file_exists($backupFile);
             </div>
 
             <div class="fases-container" id="fases-list">
-              <?php 
+              <?php
                 $fases = !empty($currentConfig['fases_fechas']) ? $currentConfig['fases_fechas'] : array();
                 foreach ($fases as $idx => $fase):
                   $isFaseActive = ($modoActivoReal === 'auto' && $faseActivaIndex === $idx);
@@ -1829,7 +1860,7 @@ $hasBackup = file_exists($backupFile);
       div.className = 'fase-item';
       div.setAttribute('data-index', newIndex);
 
-      div.innerHTML = 
+      div.innerHTML =
         '<div class="fase-header">' +
           '<div class="fase-title">' +
             '<span class="fase-number-badge">ETAPA #<span class="fase-num">' + (newIndex + 1) + '</span></span>' +

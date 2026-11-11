@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.4.0 (Compatible con PHP 5.3+)
+ * @version   1.4.1 (Compatible con PHP 5.3+)
  * ==============================================================================
  */
 

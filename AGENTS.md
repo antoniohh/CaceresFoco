@@ -43,6 +43,7 @@ Las campañas en Qualifio se ejecutan dentro de su propio motor en `https://entr
 - ❌ **NO usar namespaces o traits**.
 - ❌ **NO usar funciones anónimas complejas o funciones añadidas en PHP 5.4+** (como `http_response_code()`, generadores, etc.).
 - ✔️ **Usar `json_decode()` nativo** (soportado desde PHP 5.2).
+- ✔️ **Sanitización de entradas crudas en el Panel**: Al recibir texto JSON en bruto (`save_raw`), neutralizar `magic_quotes_gpc` con `stripslashes()` si estuviera activo en servidores heredados, depurar caracteres invisibles (BOM `\xEF\xBB\xBF` y espacios no separables `\xC2\xA0`) y reportar diagnósticos con `json_last_error()` / `json_last_error_msg()` con fallbacks seguros.
 - ✔️ **Cálculo dinámico de URLs base y detección de HTTPS**: Respetar la lógica de detección de protocolo compatible con proxies inversos y balanceadores (`HTTP_X_FORWARDED_PROTO`, `HTTP_X_FORWARDED_SSL`, `SERVER_PORT: 443`, etc.), forzando HTTPS en dominios de producción (`servicios.hoy.es` o `*.hoy.es`) para evitar URLs no seguras en canonicals o metadatos de redes.
 
 ---
@@ -186,7 +187,7 @@ Cuando un botón no está activo según el estado, se renderiza con la clase `.c
 
 1. **Nunca romper compatibilidad con PHP 5.3**: Si agregas nuevas variables o lógica de servidor, verifica la sintaxis con:
    ```bash
-   php -l index.php
+   php -l index.php && php -l panel/index.php
    ```
 2. **Caché en Assets**: Al enlazar CSS o JS en `index.php`, mantén el parámetro de versión `?v=<?php echo time(); ?>` o control de versión semántica para forzar la actualización inmediata en navegadores de usuario.
 3. **Rutas Relativas**: Los assets y enlaces internos deben mantener rutas relativas (`assets/...`, `inscripcion/`, `subir/`, `galeria/`) para funcionar independientemente del subdirectorio donde se aloje el proyecto.

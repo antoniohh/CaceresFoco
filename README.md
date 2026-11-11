@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.4.0-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.4.1-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -167,6 +167,12 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.4.1] - 2026-11-11
+- **Sanitización Robusta de JSON en el Panel Administrativo (`save_raw`)**:
+  - Depuración automática de `magic_quotes_gpc` mediante `stripslashes()` para garantizar compatibilidad con servidores PHP heredados donde la directiva se encuentre activa.
+  - Eliminación del Byte Order Mark UTF-8 (`\xEF\xBB\xBF`) y normalización de espacios de no separación invisibles (NBSP `\xC2\xA0`), evitando que caracteres espurios introducidos por editores externos o portapapeles corrompan el parseo de configuración.
+  - Diagnóstico descriptivo de errores sintácticos con `json_last_error_msg()` y fallback retrocompatible con `json_last_error()` para identificar con precisión la causa exacta ante fallos en JSON (`Error de sintaxis`, `Caracteres UTF-8 mal formados`, `Carácter de control no válido`, etc.).
 
 ### [v1.4.0] - 2026-11-11
 - **Intervalos de Fases con Inicio y Fin Independientes (`desde` y `hasta`)**: Soporte completo para delimitar cada etapa mediante fecha de inicio y fecha de fin sin solapamiento en `[desde, hasta)`, garantizando transiciones exactas en calendario.
