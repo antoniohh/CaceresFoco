@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.2.0-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.2.1-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -166,6 +166,11 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.2.1] - 2026-11-11
+- **Corrección de detección HTTPS en Producción (Proxy / CDN)**: Soporte completo para terminación SSL y proxies inversos (Cloudflare, Akamai, Varnish, Nginx, balanceadores de Vocento) mediante la inspección de cabeceras `HTTP_X_FORWARDED_PROTO`, `HTTP_X_FORWARDED_SSL`, `HTTP_FRONT_END_HTTPS`, `HTTP_X_FORWARDED_PORT` y `SERVER_PORT`.
+- **Forzado de HTTPS en Dominio Oficial**: Garantiza el protocolo `https://` en metadatos canónicos (`<link rel="canonical">`), Open Graph (`og:url`, `og:image`, `og:image:secure_url`), Twitter Cards y Schema.org cuando la petición se ejecuta bajo `servicios.hoy.es` o dominios corporativos `*.hoy.es`.
+- **Preservación de Entorno Local**: Mantiene protocolo HTTP en entornos locales (`localhost`, `127.0.0.1`) sin romper flujos de desarrollo.
 
 ### [v1.2.0] - 2026-11-10
 - **Panel de Administración Autónomo (`panel/`)**: Gestor visual mono-archivo (`index.php`) para controlar el 100% de los parámetros de `config.json` en tiempo real (modo manual, transiciones automáticas, temporizador y fases del rally). Compatible estrictamente con PHP 5.3+.

@@ -43,7 +43,7 @@ Las campañas en Qualifio se ejecutan dentro de su propio motor en `https://entr
 - ❌ **NO usar namespaces o traits**.
 - ❌ **NO usar funciones anónimas complejas o funciones añadidas en PHP 5.4+** (como `http_response_code()`, generadores, etc.).
 - ✔️ **Usar `json_decode()` nativo** (soportado desde PHP 5.2).
-- ✔️ **Cálculo dinámico de URLs base**: Respetar la lógica de detección de protocolo, host y prefijo de ruta para evitar rutas rotas en subcarpetas o CLI.
+- ✔️ **Cálculo dinámico de URLs base y detección de HTTPS**: Respetar la lógica de detección de protocolo compatible con proxies inversos y balanceadores (`HTTP_X_FORWARDED_PROTO`, `HTTP_X_FORWARDED_SSL`, `SERVER_PORT: 443`, etc.), forzando HTTPS en dominios de producción (`servicios.hoy.es` o `*.hoy.es`) para evitar URLs no seguras en canonicals o metadatos de redes.
 
 ---
 

@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.2.0 (Compatible con PHP 5.3+)
+ * @version   1.2.1 (Compatible con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -203,8 +203,46 @@ switch ($estado) {
 }
 
 // 3. DETECCIÓN DE PROTOCOLO Y DOMINIO PARA SEO Y REDES
-$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
-$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'servicios.hoy.es';
+// Detección de HTTPS compatible con balanceadores de carga, CDN y reverse proxies (Vocento / Cloudflare / Akamai)
+$isHttps = false;
+
+if (isset($_SERVER['HTTPS']) && (strtolower((string)$_SERVER['HTTPS']) === 'on' || (string)$_SERVER['HTTPS'] === '1')) {
+    $isHttps = true;
+} elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    $xProtocols = explode(',', strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']));
+    if (trim($xProtocols[0]) === 'https') {
+        $isHttps = true;
+    }
+} elseif (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
+    $isHttps = true;
+} elseif (isset($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower((string)$_SERVER['HTTP_FRONT_END_HTTPS']) === 'on') {
+    $isHttps = true;
+} elseif (isset($_SERVER['SERVER_PORT']) && (string)$_SERVER['SERVER_PORT'] === '443') {
+    $isHttps = true;
+} elseif (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && (string)$_SERVER['HTTP_X_FORWARDED_PORT'] === '443') {
+    $isHttps = true;
+}
+
+// Detección de host (soporte para reverse proxy)
+$host = 'servicios.hoy.es';
+if (isset($_SERVER['HTTP_X_FORWARDED_HOST']) && $_SERVER['HTTP_X_FORWARDED_HOST'] !== '') {
+    $forwardedHosts = explode(',', $_SERVER['HTTP_X_FORWARDED_HOST']);
+    $host = trim($forwardedHosts[0]);
+} elseif (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') {
+    $host = $_SERVER['HTTP_HOST'];
+} elseif (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
+    $host = $_SERVER['SERVER_NAME'];
+}
+
+// En el entorno de producción oficial de Diario HOY (servicios.hoy.es o *.hoy.es)
+// forzamos siempre HTTPS para garantizar canonicals y metadatos SEO seguros,
+// incluso si el proxy o balanceador interno descarga SSL y no propaga cabeceras X-Forwarded.
+$isLocalhost = (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false || strpos($host, '::1') !== false);
+if (!$isLocalhost && (strpos($host, 'hoy.es') !== false || $host === 'servicios.hoy.es')) {
+    $isHttps = true;
+}
+
+$protocol = $isHttps ? 'https://' : 'http://';
 
 if (isset($_SERVER['PHP_SELF']) && $_SERVER['PHP_SELF'] !== '') {
     $scriptDir = dirname($_SERVER['PHP_SELF']);
