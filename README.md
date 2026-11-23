@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.4.1-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.5.0-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -14,9 +14,10 @@
 Las campañas del concurso están gestionadas mediante la plataforma **Qualifio**. Debido a las restricciones de personalización e iframe dentro de Qualifio, este proyecto actúa como:
 1. **Página de aterrizaje principal (Landing)**: Visual, interactiva, rápida y responsive, con identidad visual idéntica a Diario HOY y al cartel impreso oficial.
 2. **Proxy / Puerta de enlace**: Centraliza las URLs canónicas y redirige limpiamente a cada fase del concurso:
-   - `/inscripcion/` ➔ Campaña de formulario y registro previo.
-   - `/subir/` ➔ Campaña de carga y envío de fotografías.
-   - `/galeria/` ➔ Campaña de galería pública y visualización de ganadores.
+   - `/inscripcion/` ➔ Campaña de formulario y registro previo (Qualifio).
+   - `/subir/` ➔ Campaña de carga y envío de fotografías (Qualifio).
+   - `/galeria/` ➔ Galería pública nativa de fotografías participantes con buscador por autor, filtro desplegable y visor Lightbox.
+   - `/ganadores/` ➔ Cuadro de Honor y Pódium Oficial de Ganadores con los 3 premios del certamen.
 3. **Control dinámico de fases**: Permite cambiar el estado de la web desde un simple archivo JSON sin tocar código fuente.
 
 ---
@@ -67,18 +68,29 @@ caceresenelfoco/
 │   │   └── main.js                                 # Cuenta atrás, acordeón y compartir
 │   └── pdf/
 │       └── PAG_CONCURSO_FOTOS_CACERES.pdf          # Cartel impreso original
+├── docs/
+│   ├── participaciones/                            # CSV maestros generados de participantes y fotos
+│   ├── plan/                                       # Documentación de análisis de participaciones y duplicados
+│   └── qualifio/                                   # Exportaciones originales de Qualifio y envíos directos
 ├── galeria/
-│   └── index.php                                   # Proxy 301 a Qualifio (Galería)
+│   ├── index.php                                   # Galería oficial nativa (buscador, filtros, medallas y Lightbox)
+│   └── participantes_galeria.csv                   # Dataset activo de participantes y fotografías
+├── galeria_old/
+│   └── index.php                                   # Antiguo proxy 301 a Qualifio (conservado como respaldo)
+├── ganadores/
+│   └── index.php                                   # Cuadro de Honor y Pódium Oficial de los 3 Ganadores
 ├── inscripcion/
 │   └── index.php                                   # Proxy 301 a Qualifio (Inscripción)
 ├── subir/
 │   └── index.php                                   # Proxy 301 a Qualifio (Subida fotos)
+├── public/
+│   └── fotos/                                      # Fotografías participantes con IDs estilo Qualifio
 ├── panel/
-│   ├── config.json                                 # Configuración de estados y temporizador
+│   ├── config.json                                 # Configuración de estados, temporizador y ganadores
 │   ├── config.json.bak                             # Copia de seguridad automática
 │   └── index.php                                   # Panel de administración visual (PHP 5.3)
-├── index.php                                       # Landing page pública principal
-├── robots.txt                                      # Directivas para buscadores (bloquea /panel/)
+├── index.php                                       # Landing page pública principal (4 fases/botones)
+├── robots.txt                                      # Directivas para buscadores (bloquea /panel/ y /docs/)
 ├── sitemap.xml                                     # Mapa del sitio XML con imágenes para Google
 ├── AGENTS.md                                       # Guía técnica de arquitectura y estilos
 └── README.md                                       # Documentación general
@@ -144,6 +156,8 @@ php -S localhost:8000
 
 Abre en tu navegador:
 - Portal público: **[http://localhost:8000](http://localhost:8000)**
+- Galería oficial: **[http://localhost:8000/galeria/](http://localhost:8000/galeria/)**
+- Cuadro de ganadores: **[http://localhost:8000/ganadores/](http://localhost:8000/ganadores/)**
 - Panel de administración: **[http://localhost:8000/panel/](http://localhost:8000/panel/)**
 
 ---
@@ -167,6 +181,19 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.5.0] - 2026-11-23
+- **Galería Oficial Nativa (`galeria/index.php`) y Respaldo (`galeria_old/`)**:
+  - Sustitución de la redirección 301 a Qualifio por una galería propia en código 100% compatible con PHP 5.3+, conservando el antiguo proxy en `galeria_old/`.
+  - Visualización de las **61 fotografías únicas de los 22 participantes reales** con el **nombre completo del autor debajo de cada fotografía**, avatar con iniciales, buscador instantáneo por nombre, selector desplegable por participante y visor **Lightbox a pantalla completa** con navegación por teclado.
+  - Almacenamiento local de las **67 fotografías** en `public/fotos/` bajo nomenclatura estándar de IDs de Qualifio (`upload-3543086-<id_foto>.jpg` / `.jpeg`), con corrección automática de orientación EXIF y optimización para web.
+- **Cuadro de Honor y Página de Ganadores Oficiales (`ganadores/index.php`)**:
+  - Incorporación del **4º botón en la portada (`4. Ganadores Oficiales` ➔ `/ganadores/`)**. En la Etapa 5 (`GANADORES_PUBLICADOS`), el Botón 4 pasa a ser el botón primario destacado mientras que el Botón 3 (`3. Ver Galería Completa`) permanece activo como acceso secundario.
+  - Diseño de gala del **Pódium Oficial** con el **1er Premio (🥇 Samsung Galaxy S25 FE)**, **2º Premio (🥈 Tarjeta Regalo Amazon 200€)** y **3er Premio (🥉 Bono Desayuno + Visita Bodega en Atrio)**, además de medallas automáticas sobre las fotos premiadas dentro de `/galeria/`.
+- **Selector Visual de Ganadores en el Panel (`panel/index.php`)**:
+  - Nueva sección **"🏆 4. Selección de Ganadores Oficiales (Etapa 5)"** con desplegables agrupados por autor y **vista previa en miniatura en tiempo real** al seleccionar las fotografías del 1er, 2º y 3er premio.
+- **Documentación y Consolidación de Datos (`docs/`)**:
+  - Generación de los CSV maestros en `docs/participaciones/` y `galeria/participantes_galeria.csv` integrando las exportaciones de Qualifio con los nuevos participantes recibidos directamente, archivo de fuentes originales en `docs/qualifio/` e informe técnico de análisis de duplicados MD5 en `docs/plan/analisis_participaciones_y_galeria.md`.
 
 ### [v1.4.1] - 2026-11-11
 - **Sanitización Robusta de JSON en el Panel Administrativo (`save_raw`)**:

@@ -12,8 +12,10 @@ Allow: /inscripcion/
 Allow: /subir/
 Allow: /galeria/
 
-# Excluir área de gestión administrativa privada
+# Excluir área de gestión administrativa privada y documentación interna
 Disallow: /panel/
+Disallow: /docs/
+Disallow: /galeria_old/
 
 # Sitemap Oficial
 Sitemap: https://servicios.hoy.es/caceresenelfoco/sitemap.xml

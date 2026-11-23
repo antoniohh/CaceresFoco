@@ -11,24 +11,25 @@ El proyecto opera bajo el patrón **Landing Hub & Proxy Portal**:
 ```
                        [ Usuario Final ]
                               │
-               ┌──────────────┴──────────────┐
-               ▼                             ▼
-        [ index.php ]               [ Proxy Folders ]
-   (Landing interactiva)           (Redirecciones 301)
-         │                               │
-         ├─ panel/config.json            ├─ /inscripcion/ ➔ Qualifio Form
-         ├─ assets/css/style.css         ├─ /subir/       ➔ Qualifio Upload
-         └─ assets/js/main.js            └─ /galeria/     ➔ Qualifio Gallery
-         │
-    [ Gestor Panel ]
-         └─ /panel/ (index.php)
+        ┌─────────────────────┼─────────────────────┐
+        ▼                     ▼                     ▼
+  [ index.php ]        [ Galería / Ganadores ]  [ Proxy Folders ]
+(Landing 4 fases)      (Páginas PHP Nativas)   (Redirecciones 301)
+   │                          │                     │
+   ├─ panel/config.json       ├─ /galeria/          ├─ /inscripcion/ ➔ Qualifio Form
+   ├─ assets/css/style.css    ├─ /ganadores/        ├─ /subir/       ➔ Qualifio Upload
+   └─ assets/js/main.js       └─ /public/fotos/     └─ /galeria_old/ ➔ Qualifio Gallery (Respaldo)
+   │
+[ Gestor Panel ]
+   └─ /panel/ (index.php)
 ```
 
 ### Principio de Diseño
-Las campañas en Qualifio se ejecutan dentro de su propio motor en `https://entretenimiento.hoy.es/quiz/...`. Dado que Qualifio restringe la inyección profunda de scripts y personalizaciones estructurales complejas:
-1. Este repositorio actúa como la **fachada pública** en `https://servicios.hoy.es/caceresenelfoco/`.
-2. Las subcarpetas [`inscripcion/index.php`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/inscripcion/index.php), [`subir/index.php`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/subir/index.php) y [`galeria/index.php`](file:///home/antoniohh/Proyectos/qualifio_concurso_fotografico/rally/galeria/index.php) ejecutan redirecciones HTTP 301 limpias a los quizzes correspondientes.
-3. El frontend de la landing replica con exactitud los componentes globales inyectados en Qualifio (header, footer, fondo slate y tarjeta centrada) para que el salto entre páginas sea visualmente continuo.
+Las campañas de registro y subida en Qualifio se ejecutan dentro de su propio motor en `https://entretenimiento.hoy.es/quiz/...`. Dado que Qualifio restringe la inyección profunda de scripts y personalizaciones estructurales complejas:
+1. Este repositorio actúa como la **fachada pública y motor nativo de galería/ganadores** en `https://servicios.hoy.es/caceresenelfoco/`.
+2. Las subcarpetas [`inscripcion/index.php`](inscripcion/index.php) y [`subir/index.php`](subir/index.php) ejecutan redirecciones HTTP 301 limpias a los quizzes correspondientes (mientras que [`galeria_old/index.php`](galeria_old/index.php) conserva la redirección 301 antigua de respaldo).
+3. Las subcarpetas [`galeria/index.php`](galeria/index.php) y [`ganadores/index.php`](ganadores/index.php) renderizan nativamente en PHP 5.3 la galería de fotografías participantes (alimentada desde `galeria/participantes_galeria.csv` y `public/fotos/`) y el Cuadro de Honor con los 3 ganadores oficiales seleccionados desde `/panel/`.
+4. El frontend replica con exactitud los componentes globales de Diario HOY (header, footer, fondo slate y tarjeta centrada) para que el salto entre páginas sea visualmente continuo.
 
 ---
 
@@ -109,13 +110,13 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
 
 ### Matriz de Estados (Fases 0 a 4)
 
-| Fase | Estado | Badge Hero | Botón 1 (Inscripción) | Botón 2 (Subir Fotos) | Botón 3 (Galería) |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Fase 0: Previo** | `CERRADO` | 🟡 Próximamente (`badge-closed`) | Inactivo (`tag-soon`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) |
-| **Fase 1: Registro** | `INSCRIPCIONES_ABIERTAS` | 🟢 Inscripciones Abiertas (`badge-open`) | **Activo Primario** (`tag-open`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) |
-| **Fase 2: Concurso** | `CONCURSO_ABIERTO` | 🔴 Rally en Marcha (`badge-live`) | Inactivo (`tag-done`) | **Activo Primario** (`tag-live`) | Inactivo (`tag-soon`) |
-| **Fase 3: Galería** | `GALERIA_ABIERTA` | 🖼️ Galería Abierta (`badge-gallery`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Primario** (`tag-open`) |
-| **Fase 4: Ganadores** | `GANADORES_PUBLICADOS`<br>*(alias `GALERIA_Y_GANADORES`)* | 🏆 Ganadores Oficiales (`badge-results`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Primario** (`tag-open`) |
+| Fase | Estado | Badge Hero | Botón 1 (Inscripción) | Botón 2 (Subir Fotos) | Botón 3 (Galería) | Botón 4 (Ganadores) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Fase 0: Previo** | `CERRADO` | 🟡 Próximamente (`badge-closed`) | Inactivo (`tag-soon`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) | Inactivo (`tag-soon`) |
+| **Fase 1: Registro** | `INSCRIPCIONES_ABIERTAS` | 🟢 Inscripciones Abiertas (`badge-open`) | **Activo Primario** (`tag-open`) | Inactivo (`tag-closed`) | Inactivo (`tag-soon`) | Inactivo (`tag-soon`) |
+| **Fase 2: Concurso** | `CONCURSO_ABIERTO` | 🔴 Rally en Marcha (`badge-live`) | Inactivo (`tag-done`) | **Activo Primario** (`tag-live`) | Inactivo (`tag-soon`) | Inactivo (`tag-soon`) |
+| **Fase 3: Galería** | `GALERIA_ABIERTA` | 🖼️ Galería Abierta (`badge-gallery`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Primario** (`tag-open`) | Inactivo (`tag-soon`) |
+| **Fase 4: Ganadores** | `GANADORES_PUBLICADOS`<br>*(alias `GALERIA_Y_GANADORES`)* | 🏆 Ganadores Oficiales (`badge-results`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Secundario** (`tag-done`) | **Activo Primario** (`tag-open`) |
 
 > [!NOTE]
 > En Qualifio, la campaña de galería (`/galeria/`) es continua desde el cierre de subida el 21 de noviembre; el 1 de diciembre simplemente se actualiza en Qualifio para destacar las fotos premiadas. La separación entre **Fase 3** (`GALERIA_ABIERTA`) y **Fase 4** (`GANADORES_PUBLICADOS`) en este portal hub permite mostrar la cuenta atrás hacia el fallo del jurado y ajustar los titulares editoriales de la landing.
@@ -187,7 +188,7 @@ Cuando un botón no está activo según el estado, se renderiza con la clase `.c
 
 1. **Nunca romper compatibilidad con PHP 5.3**: Si agregas nuevas variables o lógica de servidor, verifica la sintaxis con:
    ```bash
-   php -l index.php && php -l panel/index.php
+   php -l index.php && php -l panel/index.php && php -l galeria/index.php && php -l ganadores/index.php
    ```
-2. **Caché en Assets**: Al enlazar CSS o JS en `index.php`, mantén el parámetro de versión `?v=<?php echo time(); ?>` o control de versión semántica para forzar la actualización inmediata en navegadores de usuario.
-3. **Rutas Relativas**: Los assets y enlaces internos deben mantener rutas relativas (`assets/...`, `inscripcion/`, `subir/`, `galeria/`) para funcionar independientemente del subdirectorio donde se aloje el proyecto.
+2. **Caché en Assets**: Al enlazar CSS o JS en `index.php`, `galeria/index.php` o `ganadores/index.php`, mantén el parámetro de versión `?v=<?php echo time(); ?>` o control de versión semántica para forzar la actualización inmediata en navegadores de usuario.
+3. **Rutas Relativas**: Los assets y enlaces internos deben mantener rutas relativas (`assets/...`, `inscripcion/`, `subir/`, `galeria/`, `ganadores/`, `public/fotos/`) para funcionar independientemente del subdirectorio donde se aloje el proyecto.

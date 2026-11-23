@@ -47,12 +47,20 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Fase 3: Galería Pública y Ganadores -->
+  <!-- Fase 3: Galería Oficial de Participantes -->
   <url>
     <loc>https://servicios.hoy.es/caceresenelfoco/galeria/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Fase 4: Cuadro de Honor y Ganadores Oficiales -->
+  <url>
+    <loc>https://servicios.hoy.es/caceresenelfoco/ganadores/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
 
 </urlset>

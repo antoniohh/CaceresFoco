@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.4.1 (Compatible con PHP 5.3+)
+ * @version   1.5.0 (Compatible con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -125,9 +125,20 @@ $btn3 = array(
     'activo' => false,
     'destacado' => false,
     'url' => 'galeria/',
-    'titulo' => '3. Ver Galería y Ganadores',
-    'subtexto' => 'Descubre las mejores fotografías y el fallo del jurado',
+    'titulo' => '3. Ver Galería de Fotos',
+    'subtexto' => 'Explora todas las fotografías participantes del rally',
     'badge' => 'Próximamente',
+    'badge_class' => 'tag-soon',
+    'icono' => '📷'
+);
+
+$btn4 = array(
+    'activo' => false,
+    'destacado' => false,
+    'url' => 'ganadores/',
+    'titulo' => '4. Ganadores Oficiales',
+    'subtexto' => 'Fallo oficial del jurado a partir del 1 de diciembre',
+    'badge' => '1 de diciembre',
     'badge_class' => 'tag-soon',
     'icono' => '🏆'
 );
@@ -140,7 +151,8 @@ switch ($estado) {
         $btn1['badge'] = 'Próximamente';
         $btn1['badge_class'] = 'tag-soon';
         $btn2['subtexto'] = 'Disponible el 21 de noviembre';
-        $btn3['subtexto'] = 'Disponible tras el concurso';
+        $btn3['subtexto'] = 'Disponible tras el rally fotográfico';
+        $btn4['subtexto'] = 'Fallo oficial del jurado el 1 de diciembre';
         break;
 
     case 'INSCRIPCIONES_ABIERTAS':
@@ -157,9 +169,13 @@ switch ($estado) {
         $btn2['badge'] = 'Cerrado';
         $btn2['badge_class'] = 'tag-closed';
 
-        $btn3['subtexto'] = 'Disponible tras el fallo del jurado';
+        $btn3['subtexto'] = 'Se abrirá tras finalizar la subida de fotos';
         $btn3['badge'] = 'Próximamente';
         $btn3['badge_class'] = 'tag-soon';
+
+        $btn4['subtexto'] = 'Anuncio oficial de premiados el 1 de diciembre';
+        $btn4['badge'] = '1 de diciembre';
+        $btn4['badge_class'] = 'tag-soon';
         break;
 
     case 'CONCURSO_ABIERTO':
@@ -181,6 +197,10 @@ switch ($estado) {
         $btn3['subtexto'] = 'La galería se abrirá a las 15:00h tras el rally';
         $btn3['badge'] = 'Próximamente';
         $btn3['badge_class'] = 'tag-soon';
+
+        $btn4['subtexto'] = 'Fallo oficial del jurado el 1 de diciembre';
+        $btn4['badge'] = '1 de diciembre';
+        $btn4['badge_class'] = 'tag-soon';
         break;
 
     case 'GALERIA_ABIERTA':
@@ -202,10 +222,18 @@ switch ($estado) {
         $btn3['activo'] = true;
         $btn3['destacado'] = true;
         $btn3['titulo'] = '3. Ver Galería de Fotos';
-        $btn3['subtexto'] = 'Explora todas las fotografías participantes · Fallo del jurado el 1 de dic.';
+        $btn3['subtexto'] = 'Explora todas las fotografías participantes · Deliberación del jurado';
         $btn3['badge'] = '¡Abierta ahora!';
         $btn3['badge_class'] = 'tag-open';
         $btn3['icono'] = '📷';
+
+        $btn4['activo'] = false;
+        $btn4['destacado'] = false;
+        $btn4['titulo'] = '4. Ganadores Oficiales';
+        $btn4['subtexto'] = 'El jurado profesional anunciará los ganadores el 1 de diciembre';
+        $btn4['badge'] = '1 de diciembre';
+        $btn4['badge_class'] = 'tag-soon';
+        $btn4['icono'] = '🏆';
         break;
 
     case 'GANADORES_PUBLICADOS':
@@ -226,12 +254,20 @@ switch ($estado) {
         $btn2['badge_class'] = 'tag-closed';
 
         $btn3['activo'] = true;
-        $btn3['destacado'] = true;
-        $btn3['titulo'] = '3. Ver Ganadores y Galería';
-        $btn3['subtexto'] = 'Descubre las fotos premiadas y el fallo oficial del jurado';
-        $btn3['badge'] = '¡Ganadores aquí!';
-        $btn3['badge_class'] = 'tag-open';
-        $btn3['icono'] = '🏆';
+        $btn3['destacado'] = false;
+        $btn3['titulo'] = '3. Ver Galería Completa';
+        $btn3['subtexto'] = 'Explora todas las fotografías participantes del rally';
+        $btn3['badge'] = 'Abierta';
+        $btn3['badge_class'] = 'tag-done';
+        $btn3['icono'] = '📷';
+
+        $btn4['activo'] = true;
+        $btn4['destacado'] = true;
+        $btn4['titulo'] = '4. Ver Ganadores Oficiales';
+        $btn4['subtexto'] = 'Descubre las 3 fotografías premiadas y el fallo oficial del jurado';
+        $btn4['badge'] = '¡Ganadores aquí!';
+        $btn4['badge_class'] = 'tag-open';
+        $btn4['icono'] = '🏆';
         break;
 }
 
@@ -598,9 +634,9 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
             </div>
             <?php endif; ?>
 
-            <!-- FASE 3: GALERÍA Y GANADORES -->
+            <!-- FASE 3: GALERÍA DE FOTOS -->
             <?php if ($btn3['activo']): ?>
-            <a href="<?php echo $btn3['url']; ?>" class="action-card <?php echo $btn3['destacado'] ? 'card-primary' : 'card-secondary'; ?>" title="Ver galería y ganadores">
+            <a href="<?php echo $btn3['url']; ?>" class="action-card <?php echo $btn3['destacado'] ? 'card-primary' : 'card-secondary'; ?>" title="Ver galería de fotografías">
               <div class="card-step-badge">3</div>
               <div class="card-info-wrap">
                 <span class="card-main-title">
@@ -622,6 +658,33 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
                 <span class="card-subtext"><?php echo $btn3['subtexto']; ?></span>
               </div>
               <div class="card-action-icon"><?php echo $btn3['icono']; ?></div>
+            </div>
+            <?php endif; ?>
+
+            <!-- FASE 4: GANADORES OFICIALES -->
+            <?php if ($btn4['activo']): ?>
+            <a href="<?php echo $btn4['url']; ?>" class="action-card <?php echo $btn4['destacado'] ? 'card-primary' : 'card-secondary'; ?>" title="Ver ganadores oficiales del concurso">
+              <div class="card-step-badge">4</div>
+              <div class="card-info-wrap">
+                <span class="card-main-title">
+                  <?php echo $btn4['titulo']; ?>
+                  <span class="card-state-tag <?php echo $btn4['badge_class']; ?>"><?php echo $btn4['badge']; ?></span>
+                </span>
+                <span class="card-subtext"><?php echo $btn4['subtexto']; ?></span>
+              </div>
+              <div class="card-action-icon"><?php echo $btn4['icono']; ?></div>
+            </a>
+            <?php else: ?>
+            <div class="action-card card-disabled" title="Disponible a partir del 1 de diciembre">
+              <div class="card-step-badge">4</div>
+              <div class="card-info-wrap">
+                <span class="card-main-title">
+                  <?php echo $btn4['titulo']; ?>
+                  <span class="card-state-tag <?php echo $btn4['badge_class']; ?>"><?php echo $btn4['badge']; ?></span>
+                </span>
+                <span class="card-subtext"><?php echo $btn4['subtexto']; ?></span>
+              </div>
+              <div class="card-action-icon"><?php echo $btn4['icono']; ?></div>
             </div>
             <?php endif; ?>
 

@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.4.1 (Compatible con PHP 5.3+)
+ * @version   1.5.0 (Compatible con PHP 5.3+)
  *
  * Mono-archivo autocontenido (Backend PHP + Frontend HTML/CSS/JS)
  * Compatible estrictamente con PHP 5.3+
@@ -199,52 +199,58 @@ function cf_normalize_iso_date($dateStr) {
 
 // 7. CARGA DE CONFIGURACIÓN POR DEFECTO
 $defaultConfig = array(
-    'control_por_fechas' => false,
-    'estado' => 'INSCRIPCIONES_ABIERTAS',
-    'mostrar_temporizador' => true,
+    'control_por_fechas' => true,
+    'estado' => 'CERRADO',
+    'mostrar_temporizador' => false,
     'fecha_objetivo_temporizador' => '2026-11-21T12:00:00+01:00',
     'rotulo_temporizador' => 'Cuenta atrás para el inicio del rally fotográfico',
     'fases_fechas' => array(
         array(
             'estado' => 'CERRADO',
             'desde' => null,
-            'hasta' => '2026-11-16T00:00:00+01:00',
+            'hasta' => '2026-11-12T02:00:00+01:00',
             'mostrar_temporizador' => true,
-            'fecha_objetivo_temporizador' => '2026-11-16T00:00:00+01:00',
+            'fecha_objetivo_temporizador' => '2026-11-12T02:00:00+01:00',
             'rotulo_temporizador' => 'Cuenta atrás para la apertura de inscripciones'
         ),
         array(
             'estado' => 'INSCRIPCIONES_ABIERTAS',
-            'desde' => '2026-11-16T00:00:00+01:00',
-            'hasta' => '2026-11-21T12:00:00+01:00',
+            'desde' => '2026-11-12T08:00:00+01:00',
+            'hasta' => '2026-11-20T10:00:00+01:00',
             'mostrar_temporizador' => true,
-            'fecha_objetivo_temporizador' => '2026-11-21T12:00:00+01:00',
+            'fecha_objetivo_temporizador' => '2026-11-20T10:00:00+01:00',
             'rotulo_temporizador' => 'Cuenta atrás para el inicio del rally fotográfico'
         ),
         array(
             'estado' => 'CONCURSO_ABIERTO',
             'desde' => '2026-11-21T12:00:00+01:00',
-            'hasta' => '2026-11-21T15:00:00+01:00',
+            'hasta' => '2026-11-21T15:15:00+01:00',
             'mostrar_temporizador' => true,
-            'fecha_objetivo_temporizador' => '2026-11-21T15:00:00+01:00',
+            'fecha_objetivo_temporizador' => '2026-11-21T15:15:00+01:00',
             'rotulo_temporizador' => 'Tiempo restante para subir tus fotografías (hasta las 15:00h)'
         ),
         array(
             'estado' => 'GALERIA_ABIERTA',
-            'desde' => '2026-11-21T15:00:00+01:00',
-            'hasta' => '2026-12-01T10:00:00+01:00',
+            'desde' => '2026-11-21T16:00:00+01:00',
+            'hasta' => '2026-11-30T23:59:00+01:00',
             'mostrar_temporizador' => true,
             'fecha_objetivo_temporizador' => '2026-12-01T10:00:00+01:00',
             'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)'
         ),
         array(
             'estado' => 'GANADORES_PUBLICADOS',
-            'desde' => '2026-12-01T10:00:00+01:00',
+            'desde' => '2026-12-01T02:00:00+01:00',
             'hasta' => null,
             'mostrar_temporizador' => false,
             'fecha_objetivo_temporizador' => null,
             'rotulo_temporizador' => ''
         )
+    ),
+    'ganadores' => array(
+        'premio_1' => '',
+        'premio_2' => '',
+        'premio_3' => '',
+        'nota_jurado' => 'El jurado profesional nombrado por Diario HOY ha seleccionado las obras ganadoras valorando su fuerza visual, originalidad y capacidad para ensalzar la esencia y belleza monumental de Cáceres en su 40º Aniversario como Ciudad Patrimonio de la Humanidad.'
     ),
     '_comentarios' => array(
         'control_por_fechas' => 'true: activa la transición automática según calendario; false: manda el campo \'estado\'.',
@@ -279,6 +285,9 @@ if (file_exists($configFile)) {
             $currentConfig = array_merge($defaultConfig, $decoded);
             if (isset($decoded['fases_fechas']) && is_array($decoded['fases_fechas'])) {
                 $currentConfig['fases_fechas'] = $decoded['fases_fechas'];
+            }
+            if (isset($decoded['ganadores']) && is_array($decoded['ganadores'])) {
+                $currentConfig['ganadores'] = array_merge($defaultConfig['ganadores'], $decoded['ganadores']);
             }
             if (isset($decoded['_comentarios']) && is_array($decoded['_comentarios'])) {
                 $currentConfig['_comentarios'] = $decoded['_comentarios'];
@@ -376,6 +385,15 @@ if ($isLoggedIn && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             $newConfig['fases_fechas'] = $fasesArr;
+
+            // 4.1. Ganadores Oficiales
+            $gPost = (isset($_POST['ganadores']) && is_array($_POST['ganadores'])) ? $_POST['ganadores'] : array();
+            $newConfig['ganadores'] = array(
+                'premio_1' => isset($gPost['premio_1']) ? trim((string)$gPost['premio_1']) : '',
+                'premio_2' => isset($gPost['premio_2']) ? trim((string)$gPost['premio_2']) : '',
+                'premio_3' => isset($gPost['premio_3']) ? trim((string)$gPost['premio_3']) : '',
+                'nota_jurado' => isset($gPost['nota_jurado']) ? trim((string)$gPost['nota_jurado']) : $defaultConfig['ganadores']['nota_jurado']
+            );
 
             // 5. Preservar comentarios
             if (isset($currentConfig['_comentarios'])) {
@@ -554,6 +572,67 @@ $estadosValidos = array(
 // Comprobación de permisos de escritura
 $isWritable = is_writable($configFile) || (!file_exists($configFile) && is_writable($baseDir));
 $hasBackup = file_exists($backupFile);
+
+// Cargar catálogo de fotos de la galería para el selector visual de ganadores
+$csvCatalogPath = dirname($baseDir) . '/galeria/participantes_galeria.csv';
+if (!file_exists($csvCatalogPath)) {
+    $csvCatalogPath = dirname($baseDir) . '/docs/participaciones/participantes_y_fotos_completo.csv';
+}
+$catalogoFotosPorAutor = array();
+$catalogoMapaFotos = array();
+
+if (file_exists($csvCatalogPath)) {
+    $fpCat = @fopen($csvCatalogPath, 'r');
+    if ($fpCat !== false) {
+        $catHeaders = fgetcsv($fpCat, 0, ';');
+        if (is_array($catHeaders)) {
+            if (isset($catHeaders[0])) {
+                $catHeaders[0] = preg_replace('/^\xEF\xBB\xBF/', '', $catHeaders[0]);
+                $catHeaders[0] = trim($catHeaders[0], "\" \t\n\r\0\x0B");
+            }
+            $cMap = array();
+            for ($ci = 0; $ci < count($catHeaders); $ci++) {
+                $cMap[strtolower(trim($catHeaders[$ci]))] = $ci;
+            }
+            $contadorPorAutor = array();
+            while (($cRow = fgetcsv($fpCat, 0, ';')) !== false) {
+                if (!is_array($cRow) || count($cRow) < 3) continue;
+                $cVisIdx = isset($cMap['visible_galeria']) ? $cMap['visible_galeria'] : 16;
+                $cVis = isset($cRow[$cVisIdx]) ? trim($cRow[$cVisIdx]) : '1';
+                if ($cVis === '0') continue;
+
+                $cIdIdx = isset($cMap['id_foto']) ? $cMap['id_foto'] : 0;
+                $cNomIdx = isset($cMap['nombre_completo']) ? $cMap['nombre_completo'] : 4;
+                $cArcIdx = isset($cMap['archivo_foto']) ? $cMap['archivo_foto'] : 10;
+
+                $cId = isset($cRow[$cIdIdx]) ? trim($cRow[$cIdIdx]) : '';
+                $cAutor = isset($cRow[$cNomIdx]) ? trim($cRow[$cNomIdx]) : '';
+                $cArchivo = isset($cRow[$cArcIdx]) ? trim($cRow[$cArcIdx]) : '';
+                if ($cId === '' || $cArchivo === '') continue;
+
+                if (!isset($contadorPorAutor[$cAutor])) {
+                    $contadorPorAutor[$cAutor] = 0;
+                    $catalogoFotosPorAutor[$cAutor] = array();
+                }
+                $contadorPorAutor[$cAutor]++;
+                $numF = $contadorPorAutor[$cAutor];
+
+                $itemCat = array(
+                    'id_foto' => $cId,
+                    'autor' => $cAutor,
+                    'num' => $numF,
+                    'archivo' => $cArchivo,
+                    'src' => '../public/fotos/' . $cArchivo,
+                    'label' => $cAutor . ' — Foto #' . $numF . ' (' . substr($cId, 0, 8) . ')'
+                );
+                $catalogoFotosPorAutor[$cAutor][] = $itemCat;
+                $catalogoMapaFotos[$cId] = $itemCat;
+            }
+            ksort($catalogoFotosPorAutor);
+        }
+        fclose($fpCat);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -1289,7 +1368,13 @@ $hasBackup = file_exists($backupFile);
     </div>
     <div class="nav-actions">
       <a href="../" target="_blank" class="btn-link-public" title="Abrir landing pública en nueva pestaña">
-        Ver Landing Pública ↗
+        Portada ↗
+      </a>
+      <a href="../galeria/" target="_blank" class="btn-link-public" title="Abrir galería pública en nueva pestaña">
+        📷 Galería ↗
+      </a>
+      <a href="../ganadores/" target="_blank" class="btn-link-public" title="Abrir página de ganadores en nueva pestaña">
+        🏆 Ganadores ↗
       </a>
       <?php if ($authRequired && $isLoggedIn): ?>
         <a href="?action=logout" class="btn-logout" title="Cerrar sesión">
@@ -1596,6 +1681,81 @@ $hasBackup = file_exists($backupFile);
             <button type="button" class="btn-add-fase" onclick="cfAddFase()">
               + Añadir Nueva Fase al Calendario
             </button>
+          </div>
+
+          <!-- TARJETA: SELECCIÓN DE GANADORES OFICIALES -->
+          <div class="admin-card" id="card-ganadores-oficiales">
+            <div class="card-header">
+              <div>
+                <h3>🏆 4. Selección de Ganadores Oficiales (Etapa 5)</h3>
+                <p>Selecciona las 3 fotografías premiadas por el jurado para la página <code>/ganadores/</code> y para las medallas destacadas en <code>/galeria/</code>.</p>
+              </div>
+              <a href="../ganadores/" target="_blank" class="btn-link-public">
+                Ver Página /ganadores/ ↗
+              </a>
+            </div>
+
+            <?php
+              $gActual = isset($currentConfig['ganadores']) && is_array($currentConfig['ganadores']) ? $currentConfig['ganadores'] : $defaultConfig['ganadores'];
+              $slotsPremios = array(
+                  'premio_1' => array('titulo' => '🥇 1er Premio · Samsung Galaxy S25 FE', 'border' => '#f59e0b', 'bg' => '#fffbeb'),
+                  'premio_2' => array('titulo' => '🥈 2º Premio · Tarjeta Regalo Amazon 200€', 'border' => '#94a3b8', 'bg' => '#f8fafc'),
+                  'premio_3' => array('titulo' => '🥉 3er Premio · Bono Desayuno + Visita Bodega en Atrio', 'border' => '#d97706', 'bg' => '#fff7ed')
+              );
+            ?>
+
+            <div class="fase-grid" style="margin-bottom: 18px;">
+              <?php foreach ($slotsPremios as $slotKey => $slotMeta): ?>
+                <?php
+                  $selId = isset($gActual[$slotKey]) ? trim((string)$gActual[$slotKey]) : '';
+                  $selPhoto = ($selId !== '' && isset($catalogoMapaFotos[$selId])) ? $catalogoMapaFotos[$selId] : null;
+                ?>
+                <div class="form-group" style="background: <?php echo $slotMeta['bg']; ?>; border: 1.5px solid <?php echo $slotMeta['border']; ?>; border-radius: 10px; padding: 14px; margin-bottom: 0;">
+                  <label class="form-label" for="select_<?php echo $slotKey; ?>" style="font-size: 13.5px; color: #0f172a;">
+                    <?php echo htmlspecialchars($slotMeta['titulo']); ?>
+                  </label>
+                  <select id="select_<?php echo $slotKey; ?>"
+                          name="ganadores[<?php echo $slotKey; ?>]"
+                          onchange="cfPreviewWinnerPhoto(this, 'preview_<?php echo $slotKey; ?>')">
+                    <option value="">— Sin asignar todavía —</option>
+                    <?php foreach ($catalogoFotosPorAutor as $autorCat => $fotosAutor): ?>
+                      <optgroup label="<?php echo htmlspecialchars($autorCat); ?>">
+                        <?php foreach ($fotosAutor as $fCat): ?>
+                          <option value="<?php echo htmlspecialchars($fCat['id_foto']); ?>"
+                                  data-src="<?php echo htmlspecialchars($fCat['src']); ?>"
+                                  data-author="<?php echo htmlspecialchars($fCat['autor']); ?>"
+                                  <?php echo ($selId === $fCat['id_foto']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($fCat['label']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </optgroup>
+                    <?php endforeach; ?>
+                  </select>
+
+                  <div id="preview_<?php echo $slotKey; ?>" style="margin-top: 10px; display: <?php echo ($selPhoto !== null) ? 'flex' : 'none'; ?>; align-items: center; gap: 12px; background: #ffffff; padding: 8px 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <img src="<?php echo ($selPhoto !== null) ? htmlspecialchars($selPhoto['src']) : ''; ?>"
+                         alt=""
+                         style="width: 64px; height: 48px; object-fit: cover; border-radius: 6px; background: #0f172a; flex-shrink: 0;">
+                    <div style="min-width: 0;">
+                      <strong class="preview-author" style="display: block; font-size: 13px; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <?php echo ($selPhoto !== null) ? htmlspecialchars($selPhoto['autor']) : ''; ?>
+                      </strong>
+                      <span class="preview-id" style="font-size: 11px; color: #64748b; font-family: monospace;">
+                        <?php echo ($selPhoto !== null) ? htmlspecialchars($selPhoto['id_foto']) : ''; ?>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="nota_jurado">Texto / Nota Oficial del Fallo del Jurado (mostrado en la cabecera de <code>/ganadores/</code>):</label>
+              <input type="text"
+                     id="nota_jurado"
+                     name="ganadores[nota_jurado]"
+                     value="<?php echo htmlspecialchars(isset($gActual['nota_jurado']) ? $gActual['nota_jurado'] : $defaultConfig['ganadores']['nota_jurado']); ?>">
+            </div>
           </div>
 
           <!-- BARRA DE ACCIÓN GUARDAR -->
@@ -1929,6 +2089,27 @@ $hasBackup = file_exists($backupFile);
 
       container.appendChild(div);
       cfRenumberFases();
+    }
+
+    // PREVISUALIZACIÓN EN VIVO DE FOTO GANADORA EN EL PANEL
+    function cfPreviewWinnerPhoto(selectEl, previewId) {
+      var previewBox = document.getElementById(previewId);
+      if (!previewBox) return;
+      var opt = selectEl.options[selectEl.selectedIndex];
+      var val = selectEl.value;
+      if (!val || !opt) {
+        previewBox.style.display = 'none';
+        return;
+      }
+      var src = opt.getAttribute('data-src') || '';
+      var author = opt.getAttribute('data-author') || '';
+      var img = previewBox.querySelector('img');
+      var authorEl = previewBox.querySelector('.preview-author');
+      var idEl = previewBox.querySelector('.preview-id');
+      if (img) img.src = src;
+      if (authorEl) authorEl.textContent = author;
+      if (idEl) idEl.textContent = val;
+      previewBox.style.display = 'flex';
     }
 
     // VALIDACIÓN CLIENTE RAW JSON
