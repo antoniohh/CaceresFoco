@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.5.0 (Compatible con PHP 5.3+)
+ * @version   1.5.1 (Compatible con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -137,8 +137,8 @@ $btn4 = array(
     'destacado' => false,
     'url' => 'ganadores/',
     'titulo' => '4. Ganadores Oficiales',
-    'subtexto' => 'Fallo oficial del jurado a partir del 1 de diciembre',
-    'badge' => '1 de diciembre',
+    'subtexto' => 'Fallo oficial del jurado a partir del 2 de diciembre',
+    'badge' => '2 de diciembre',
     'badge_class' => 'tag-soon',
     'icono' => '🏆'
 );
@@ -152,7 +152,7 @@ switch ($estado) {
         $btn1['badge_class'] = 'tag-soon';
         $btn2['subtexto'] = 'Disponible el 21 de noviembre';
         $btn3['subtexto'] = 'Disponible tras el rally fotográfico';
-        $btn4['subtexto'] = 'Fallo oficial del jurado el 1 de diciembre';
+        $btn4['subtexto'] = 'Fallo oficial del jurado el 2 de diciembre';
         break;
 
     case 'INSCRIPCIONES_ABIERTAS':
@@ -173,8 +173,8 @@ switch ($estado) {
         $btn3['badge'] = 'Próximamente';
         $btn3['badge_class'] = 'tag-soon';
 
-        $btn4['subtexto'] = 'Anuncio oficial de premiados el 1 de diciembre';
-        $btn4['badge'] = '1 de diciembre';
+        $btn4['subtexto'] = 'Anuncio oficial de premiados el 2 de diciembre';
+        $btn4['badge'] = '2 de diciembre';
         $btn4['badge_class'] = 'tag-soon';
         break;
 
@@ -198,8 +198,8 @@ switch ($estado) {
         $btn3['badge'] = 'Próximamente';
         $btn3['badge_class'] = 'tag-soon';
 
-        $btn4['subtexto'] = 'Fallo oficial del jurado el 1 de diciembre';
-        $btn4['badge'] = '1 de diciembre';
+        $btn4['subtexto'] = 'Fallo oficial del jurado el 2 de diciembre';
+        $btn4['badge'] = '2 de diciembre';
         $btn4['badge_class'] = 'tag-soon';
         break;
 
@@ -230,8 +230,8 @@ switch ($estado) {
         $btn4['activo'] = false;
         $btn4['destacado'] = false;
         $btn4['titulo'] = '4. Ganadores Oficiales';
-        $btn4['subtexto'] = 'El jurado profesional anunciará los ganadores el 1 de diciembre';
-        $btn4['badge'] = '1 de diciembre';
+        $btn4['subtexto'] = 'El jurado profesional anunciará los ganadores el 2 de diciembre';
+        $btn4['badge'] = '2 de diciembre';
         $btn4['badge_class'] = 'tag-soon';
         $btn4['icono'] = '🏆';
         break;
@@ -675,7 +675,7 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
               <div class="card-action-icon"><?php echo $btn4['icono']; ?></div>
             </a>
             <?php else: ?>
-            <div class="action-card card-disabled" title="Disponible a partir del 1 de diciembre">
+            <div class="action-card card-disabled" title="Disponible a partir del 2 de diciembre">
               <div class="card-step-badge">4</div>
               <div class="card-info-wrap">
                 <span class="card-main-title">
@@ -751,7 +751,7 @@ $shareText = '¡Participa en Cáceres en el Foco! Concurso fotográfico de Diari
                 Los criterios de valoración se basarán en la <strong>fuerza visual</strong> y en <strong>ensalzar la esencia y belleza de la ciudad de Cáceres</strong>.
               </p>
               <p>
-                La comunicación oficial de los ganadores se realizará a partir del <strong>1 de diciembre de 2026</strong> en el diario HOY y en este sitio web.
+                La comunicación oficial de los ganadores se realizará a partir del <strong>2 de diciembre de 2026</strong> en el diario HOY y en este sitio web.
               </p>
             </div>
           </div>

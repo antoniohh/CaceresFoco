@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/galeria/
- * @version   1.5.0 (Compatible estrictamente con PHP 5.3+)
+ * @version   1.5.1 (Compatible estrictamente con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -28,8 +28,8 @@ $config = array(
     'control_por_fechas' => false,
     'estado' => 'GALERIA_ABIERTA',
     'mostrar_temporizador' => true,
-    'fecha_objetivo_temporizador' => '2026-12-01T10:00:00+01:00',
-    'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)',
+    'fecha_objetivo_temporizador' => '2026-12-02T10:00:00+01:00',
+    'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (2 de diciembre)',
     'fases_fechas' => array(),
     'ganadores' => array(
         'premio_1' => '',
@@ -101,9 +101,10 @@ if ($config['control_por_fechas'] && !empty($config['fases_fechas'])) {
 }
 
 $estado = $config['estado'];
+$ganadoresPublicados = ($estado === 'GANADORES_PUBLICADOS' || $estado === 'GALERIA_Y_GANADORES');
 $badgeTexto = 'Galería Oficial · Deliberación del Jurado';
 $badgeClase = 'badge-gallery';
-if ($estado === 'GANADORES_PUBLICADOS' || $estado === 'GALERIA_Y_GANADORES') {
+if ($ganadoresPublicados) {
     $badgeTexto = '¡Ganadores Oficiales y Galería!';
     $badgeClase = 'badge-results';
 }
@@ -985,7 +986,7 @@ $shareText = 'Descubre la galería oficial de fotos de «Cáceres en el Foco» e
             <span>←</span>
             <span>Volver a la portada</span>
           </a>
-          <?php if ($estado === 'GANADORES_PUBLICADOS' || $estado === 'GALERIA_Y_GANADORES' || $config['ganadores']['premio_1'] !== ''): ?>
+          <?php if ($ganadoresPublicados): ?>
           <a href="../ganadores/" class="back-home-link" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #f59e0b;" title="Ver cuadro de honor y ganadores oficiales">
             <span>🏆</span>
             <span>Ver Ganadores Oficiales</span>
@@ -1008,7 +1009,7 @@ $shareText = 'Descubre la galería oficial de fotos de «Cáceres en el Foco» e
         <div class="gallery-stats-row">
           <span class="stat-pill">📷 <strong><?php echo (int)$totalFotos; ?></strong> Fotografías en concurso</span>
           <span class="stat-pill">👤 <strong><?php echo (int)$totalAutores; ?></strong> Participantes</span>
-          <span class="stat-pill">🏆 Fallo del jurado: <strong>1 de diciembre</strong></span>
+          <span class="stat-pill">🏆 Fallo del jurado: <strong>2 de diciembre</strong></span>
         </div>
       </header>
 
@@ -1096,7 +1097,7 @@ $shareText = 'Descubre la galería oficial de fotos de «Cáceres en el Foco» e
               }
               $premioCardClass = '';
               $premioBadgeHtml = '';
-              if ($item['id_foto'] !== '') {
+              if ($ganadoresPublicados && $item['id_foto'] !== '') {
                   if ($config['ganadores']['premio_1'] !== '' && $item['id_foto'] === $config['ganadores']['premio_1']) {
                       $premioCardClass = ' is-winner-1';
                       $premioBadgeHtml = '<span class="photo-winner-medal medal-gold">🥇 1er Premio</span>';

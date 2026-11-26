@@ -88,14 +88,14 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
     {
       "estado": "GALERIA_ABIERTA",
       "desde": "2026-11-21T15:00:00+01:00",
-      "hasta": "2026-12-01T10:00:00+01:00",
+      "hasta": "2026-12-02T10:00:00+01:00",
       "mostrar_temporizador": true,
-      "fecha_objetivo_temporizador": "2026-12-01T10:00:00+01:00",
-      "rotulo_temporizador": "Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)"
+      "fecha_objetivo_temporizador": "2026-12-02T10:00:00+01:00",
+      "rotulo_temporizador": "Cuenta atrás para el anuncio oficial de ganadores (2 de diciembre)"
     },
     {
       "estado": "GANADORES_PUBLICADOS",
-      "desde": "2026-12-01T10:00:00+01:00",
+      "desde": "2026-12-02T10:00:00+01:00",
       "hasta": null,
       "mostrar_temporizador": false,
       "fecha_objetivo_temporizador": null,
@@ -119,7 +119,7 @@ El flujo del concurso se controla desde [`panel/config.json`](panel/config.json)
 | **Fase 4: Ganadores** | `GANADORES_PUBLICADOS`<br>*(alias `GALERIA_Y_GANADORES`)* | 🏆 Ganadores Oficiales (`badge-results`) | Inactivo (`tag-done`) | Inactivo (`tag-closed`) | **Activo Secundario** (`tag-done`) | **Activo Primario** (`tag-open`) |
 
 > [!NOTE]
-> En Qualifio, la campaña de galería (`/galeria/`) es continua desde el cierre de subida el 21 de noviembre; el 1 de diciembre simplemente se actualiza en Qualifio para destacar las fotos premiadas. La separación entre **Fase 3** (`GALERIA_ABIERTA`) y **Fase 4** (`GANADORES_PUBLICADOS`) en este portal hub permite mostrar la cuenta atrás hacia el fallo del jurado y ajustar los titulares editoriales de la landing.
+> En Qualifio, la campaña de galería (`/galeria/`) es continua desde el cierre de subida el 21 de noviembre; el 2 de diciembre simplemente se actualiza en Qualifio para destacar las fotos premiadas. La separación entre **Fase 3** (`GALERIA_ABIERTA`) y **Fase 4** (`GANADORES_PUBLICADOS`) en este portal hub permite mostrar la cuenta atrás hacia el fallo del jurado y ajustar los titulares editoriales de la landing.
 
 #### Comportamiento de Botones Inactivos
 Cuando un botón no está activo según el estado, se renderiza con la clase `.card-disabled`, cursor `not-allowed`, enlace no interactivo y una etiqueta textual descriptiva (*Próximamente*, *Cerrado* o *Finalizado*).

@@ -3,7 +3,7 @@
 [![PHP](https://img.shields.io/badge/PHP-5.3%20%7C%207.x%20%7C%208.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
 [![Responsive](https://img.shields.io/badge/Responsive-100%25-brightgreen?style=flat-square)](https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![SEO](https://img.shields.io/badge/SEO%20%26%20Social-Open%20Graph%20%2B%20JSON--LD-blue?style=flat-square)](https://schema.org)
-[![Version](https://img.shields.io/badge/Version-1.5.0-red?style=flat-square)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.5.1-red?style=flat-square)](https://github.com)
 
 > Landing page interactiva y pasarela de redirección (proxy portal) para el concurso fotográfico **«Cáceres en el Foco»**, organizado por **Diario HOY** con motivo del **40º Aniversario de Cáceres como Patrimonio de la Humanidad por la UNESCO**.
 
@@ -29,8 +29,8 @@ Las campañas del concurso están gestionadas mediante la plataforma **Qualifio*
   - `CERRADO` (Fase 0): Previo al concurso, botones en espera o cuenta atrás hacia apertura.
   - `INSCRIPCIONES_ABIERTAS` (Fase 1): Botón 1 de inscripción destacado en rojo con pulso; las demás fases en espera.
   - `CONCURSO_ABIERTO` (Fase 2): Rally en curso (12:00 a 15:00h); botón 2 de subida de fotos destacado como acción principal.
-  - `GALERIA_ABIERTA` (Fase 3): Galería pública de fotos participantes mientras el jurado delibera (21 nov 15:00h - 1 dic) con cuenta atrás hacia el fallo oficial.
-  - `GANADORES_PUBLICADOS` (Fase 4): Fallo oficial anunciado y galería completa premiada (1 dic en adelante).
+  - `GALERIA_ABIERTA` (Fase 3): Galería pública de fotos participantes mientras el jurado delibera (21 nov 15:00h - 2 dic) con cuenta atrás hacia el fallo oficial.
+  - `GANADORES_PUBLICADOS` (Fase 4): Fallo oficial anunciado y galería completa premiada (2 dic en adelante).
 - **Temporizador / Cuenta Atrás configurable**: Reloj dinámico en tiempo real que se puede activar o desactivar (`true`/`false`) y apuntar a cualquier fecha u hora ISO.
 - **Identidad Visual Corporativa**:
   - Cabecera y pie nativos de **Diario HOY** (línea 1200px `#202020`).
@@ -69,6 +69,7 @@ caceresenelfoco/
 │   └── pdf/
 │       └── PAG_CONCURSO_FOTOS_CACERES.pdf          # Cartel impreso original
 ├── docs/
+│   ├── ganadores/                                   # Captura de la selección oficial de premios
 │   ├── participaciones/                            # CSV maestros generados de participantes y fotos
 │   ├── plan/                                       # Documentación de análisis de participaciones y duplicados
 │   └── qualifio/                                   # Exportaciones originales de Qualifio y envíos directos
@@ -181,6 +182,12 @@ Sube todos los archivos a la carpeta asignada en el servidor (por ejemplo `https
 ---
 
 ## 📋 Historial de Versiones
+
+### [v1.5.1] - 2026-11-26
+- **Publicación de Ganadores Controlada por Fase**: La asignación de premios en el panel ya no los hace visibles antes de que el estado pase a `GANADORES_PUBLICADOS`; también se ocultan los enlaces y medallas anticipados en la galería.
+- **Calendario Actualizado**: La deliberación y su cuenta atrás se mantienen hasta el **2 de diciembre de 2026 a las 10:00 (Europe/Madrid)**, momento en que se habilita la publicación de los ganadores.
+- **Ganadores Configurados**: Se cargaron desde la captura de referencia en `docs/ganadores/image.png` Miguel Ángel Muñoz Ruiz (1.º), Pedro Reig Delgado (2.º) y Sara María Rubio Largo (3.º).
+- **Documentación**: Actualizados README, guía de desarrollo y análisis de gestión de ganadores con el calendario y el comportamiento de publicación vigentes.
 
 ### [v1.5.0] - 2026-11-23
 - **Galería Oficial Nativa (`galeria/index.php`) y Respaldo (`galeria_old/`)**:

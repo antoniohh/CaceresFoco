@@ -159,5 +159,8 @@ La galería (`galeria/index.php`) lee dinámicamente el archivo `galeria/partici
   - `premio_1`: 🥇 **1er Premio** (Samsung Galaxy S25 FE)
   - `premio_2`: 🥈 **2º Premio** (Tarjeta Regalo Amazon de 200€)
   - `premio_3`: 🥉 **3er Premio** (Bono Desayuno + Visita Bodega en Atrio)
-- Al guardar en `panel/config.json`, las 3 fotografías se publican automáticamente en el Pódium Oficial de `/ganadores/` y lucen su medalla correspondiente (`🥇 1er Premio`, `🥈 2º Premio`, `🥉 3er Premio`) dentro de `/galeria/`.
-
+- La selección se guarda en `panel/config.json`, pero **no se hace pública al guardarla**: el pódium, el enlace a ganadores y las medallas aparecen únicamente cuando el estado resuelto es `GANADORES_PUBLICADOS`. Con el calendario actual, la publicación está programada para el **2 de diciembre de 2026 a las 10:00 (Europe/Madrid)**.
+- Selección registrada a partir de la captura `docs/ganadores/image.png`:
+  - 🥇 **Miguel Ángel Muñoz Ruiz** — foto `1BCE1CF4-0AB1-4B2A-833C-6E6C8D3EBCFE`.
+  - 🥈 **Pedro Reig Delgado** — foto `6EC7FBBD-5822-4B34-94FC-921865A226A1`.
+  - 🥉 **Sara María Rubio Largo** — foto `9DEC633F-EDE4-4664-8718-ADBEE25DFACA`.

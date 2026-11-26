@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/ganadores/
- * @version   1.5.0 (Compatible estrictamente con PHP 5.3+)
+ * @version   1.5.1 (Compatible estrictamente con PHP 5.3+)
  * ==============================================================================
  */
 
@@ -30,8 +30,8 @@ $config = array(
     'control_por_fechas' => false,
     'estado' => 'GANADORES_PUBLICADOS',
     'mostrar_temporizador' => false,
-    'fecha_objetivo_temporizador' => '2026-12-01T10:00:00+01:00',
-    'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)',
+    'fecha_objetivo_temporizador' => '2026-12-02T10:00:00+01:00',
+    'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (2 de diciembre)',
     'fases_fechas' => array(),
     'ganadores' => array(
         'premio_1' => '',
@@ -241,9 +241,10 @@ if (file_exists($csvPath)) {
 }
 
 $gCfg = $config['ganadores'];
-$win1 = ($gCfg['premio_1'] !== '' && isset($fotosPorId[$gCfg['premio_1']])) ? $fotosPorId[$gCfg['premio_1']] : null;
-$win2 = ($gCfg['premio_2'] !== '' && isset($fotosPorId[$gCfg['premio_2']])) ? $fotosPorId[$gCfg['premio_2']] : null;
-$win3 = ($gCfg['premio_3'] !== '' && isset($fotosPorId[$gCfg['premio_3']])) ? $fotosPorId[$gCfg['premio_3']] : null;
+$ganadoresPublicados = ($config['estado'] === 'GANADORES_PUBLICADOS' || $config['estado'] === 'GALERIA_Y_GANADORES');
+$win1 = ($ganadoresPublicados && $gCfg['premio_1'] !== '' && isset($fotosPorId[$gCfg['premio_1']])) ? $fotosPorId[$gCfg['premio_1']] : null;
+$win2 = ($ganadoresPublicados && $gCfg['premio_2'] !== '' && isset($fotosPorId[$gCfg['premio_2']])) ? $fotosPorId[$gCfg['premio_2']] : null;
+$win3 = ($ganadoresPublicados && $gCfg['premio_3'] !== '' && isset($fotosPorId[$gCfg['premio_3']])) ? $fotosPorId[$gCfg['premio_3']] : null;
 
 $hayGanadores = ($win1 !== null || $win2 !== null || $win3 !== null);
 
@@ -866,7 +867,7 @@ $shareText = '¡Ya puedes conocer las fotografías ganadoras del concurso «Các
         </div>
         <span class="topbar-gold-badge">
           <span>🏆</span>
-          <span><?php echo $hayGanadores ? 'Fallo Oficial del Jurado' : 'Anuncio: 1 de Diciembre'; ?></span>
+          <span><?php echo $hayGanadores ? 'Fallo Oficial del Jurado' : 'Anuncio: 2 de Diciembre'; ?></span>
         </span>
       </div>
 
@@ -995,13 +996,13 @@ $shareText = '¡Ya puedes conocer las fotografías ganadoras del concurso «Các
             <div style="font-size: 44px; line-height: 1;">⚖️ 🏆</div>
             <h2>El Jurado Profesional se encuentra en Fase de Deliberación</h2>
             <p>
-              El plazo de recepción de fotografías concluyó el sábado 21 de noviembre con <strong><?php echo (int)$totalFotosActivas; ?> instantáneas a concurso</strong>. El fallo oficial con los 3 ganadores se publicará en esta página a partir del <strong>1 de diciembre de 2026</strong>.
+              El plazo de recepción de fotografías concluyó el sábado 21 de noviembre con <strong><?php echo (int)$totalFotosActivas; ?> instantáneas a concurso</strong>. El fallo oficial con los 3 ganadores se publicará en esta página a partir del <strong>2 de diciembre de 2026</strong>.
             </p>
 
-            <!-- CUENTA ATRÁS HACIA EL FALLO DEL 1 DE DICIEMBRE -->
-            <div class="countdown-wrapper" id="event-countdown" data-target-date="2026-12-01T10:00:00+01:00" style="max-width: 520px; margin: 0 auto 22px auto;">
+            <!-- CUENTA ATRÁS HACIA EL FALLO DEL 2 DE DICIEMBRE -->
+            <div class="countdown-wrapper" id="event-countdown" data-target-date="2026-12-02T10:00:00+01:00" style="max-width: 520px; margin: 0 auto 22px auto;">
               <div class="countdown-title">
-                <span>⏱️ Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)</span>
+                <span>⏱️ Cuenta atrás para el anuncio oficial de ganadores (2 de diciembre)</span>
               </div>
               <div class="countdown-digits-grid">
                 <div class="countdown-item">

@@ -10,7 +10,7 @@
  *            CIF: A-78865441 · Todos los derechos reservados.
  * @link      https://www.hoy.es
  * @link      https://servicios.hoy.es/caceresenelfoco/
- * @version   1.5.0 (Compatible con PHP 5.3+)
+ * @version   1.5.1 (Compatible con PHP 5.3+)
  *
  * Mono-archivo autocontenido (Backend PHP + Frontend HTML/CSS/JS)
  * Compatible estrictamente con PHP 5.3+
@@ -232,14 +232,14 @@ $defaultConfig = array(
         array(
             'estado' => 'GALERIA_ABIERTA',
             'desde' => '2026-11-21T16:00:00+01:00',
-            'hasta' => '2026-11-30T23:59:00+01:00',
+            'hasta' => '2026-12-02T10:00:00+01:00',
             'mostrar_temporizador' => true,
-            'fecha_objetivo_temporizador' => '2026-12-01T10:00:00+01:00',
-            'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (1 de diciembre)'
+            'fecha_objetivo_temporizador' => '2026-12-02T10:00:00+01:00',
+            'rotulo_temporizador' => 'Cuenta atrás para el anuncio oficial de ganadores (2 de diciembre)'
         ),
         array(
             'estado' => 'GANADORES_PUBLICADOS',
-            'desde' => '2026-12-01T02:00:00+01:00',
+            'desde' => '2026-12-02T10:00:00+01:00',
             'hasta' => null,
             'mostrar_temporizador' => false,
             'fecha_objetivo_temporizador' => null,
@@ -265,8 +265,8 @@ $defaultConfig = array(
             'CERRADO' => 'Fase 0: Previo al concurso. Inscripciones cerradas o cuenta atrás para apertura.',
             'INSCRIPCIONES_ABIERTAS' => 'Fase 1: Registro previo (16-21 nov). Botón 1 activo y destacado.',
             'CONCURSO_ABIERTO' => 'Fase 2: Rally en marcha (21 nov, 12:00-15:00h). Botón 2 (Subir fotos) activo y destacado.',
-            'GALERIA_ABIERTA' => 'Fase 3: Galería abierta y deliberación del jurado (21 nov 15:00h - 1 dic). Botón 3 activo para ver fotos participantes con cuenta atrás al fallo.',
-            'GANADORES_PUBLICADOS' => 'Fase 4: Ganadores oficiales y selección premiada publicada (1 dic en adelante). Botón 3 activo.'
+            'GALERIA_ABIERTA' => 'Fase 3: Galería abierta y deliberación del jurado (21 nov 15:00h - 2 dic). Botón 3 activo para ver fotos participantes con cuenta atrás al fallo.',
+            'GANADORES_PUBLICADOS' => 'Fase 4: Ganadores oficiales y selección premiada publicada (2 dic en adelante). Botón 3 activo.'
         ),
         'mostrar_temporizador' => 'true para mostrar la cuenta atrás, false para ocultarla.'
     )
